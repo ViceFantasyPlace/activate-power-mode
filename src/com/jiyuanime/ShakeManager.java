@@ -54,7 +54,7 @@ public class ShakeManager {
     }
 
     public void shake() {
-        if (isEnable && mNowEditorJComponent != null) {
+        if (isEnable) {
             isShaking = true;
 
             int x = shakeIntensity(SHAKE_MIN, SHAKE_MAX);
@@ -64,9 +64,11 @@ public class ShakeManager {
                 mTimer.schedule(new TimerTask() {
                     public void run() {
                         try {
-                            SwingUtilities.invokeLater(() -> mNowEditorJComponent.setLocation(x, y));
+                            if (mNowEditorJComponent != null)
+                                SwingUtilities.invokeLater(() -> mNowEditorJComponent.setLocation(x, y));
                             Thread.sleep(75);
-                            SwingUtilities.invokeLater(() -> mNowEditorJComponent.setLocation(0, 0));
+                            if (mNowEditorJComponent != null)
+                                SwingUtilities.invokeLater(() -> mNowEditorJComponent.setLocation(0, 0));
                             isShaking = false;
                         } catch (InterruptedException e) {
                             e.printStackTrace();

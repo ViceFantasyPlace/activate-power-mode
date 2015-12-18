@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 public class ParticlePanel implements Runnable, Border{
     private static ParticlePanel mParticlePanel;
 
-    private static final int MAX_PARTICLE_COUNT = 50;
+    private static final int MAX_PARTICLE_COUNT = 100;
 
     private java.util.HashMap<String, ParticleView> mParticleViews = new java.util.HashMap<>();
     private int mParticleIndex = 0;

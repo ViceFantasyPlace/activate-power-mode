@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
   <name>activate-power-mode</name>
-  <version>0.0.5</version>
+  <version>0.0.6</version>
   <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
 
   <description><![CDATA[

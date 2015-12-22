@@ -31,6 +31,20 @@
 
   <actions>
     <!-- Add your actions here -->
+      <group id="ActivatePowerModeGroup" popup="true"
+             text="activate-power-mode">
+          <add-to-group group-id="WindowMenu" anchor="first"/>
+
+          <action id="ShakeSwitch" class="com.jiyuanime.ShakeSwitchAction" text="shake" description="shake">
+              <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt S"/>
+          </action>
+
+          <action id="ParticleSwitch" class="com.jiyuanime.ParticleSwitchAction" text="particle" description="particle">
+              <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
+          </action>
+      </group>
+
+
   </actions>
 
   <application-components>

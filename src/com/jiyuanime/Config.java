@@ -6,6 +6,8 @@ package com.jiyuanime;
  */
 public class Config {
 
-    public static final boolean IS_SHAKE = true;
-    public static final boolean IS_SPARK = true;
+    public static boolean IS_SHAKE = true;
+    public static boolean IS_SPARK = true;
+
+
 }

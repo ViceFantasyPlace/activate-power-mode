@@ -1,10 +1,9 @@
 package com.jiyuanime;
 
 import com.intellij.openapi.editor.Editor;
+import com.jiyuanime.colorful.ColorFactory;
 
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import java.awt.*;
 
 /**
@@ -40,7 +39,11 @@ public class ActivatePowerCaretListener implements com.intellij.openapi.editor.e
             }
 
             Point point = nowEditor.logicalPositionToXY(caretEvent.getNewPosition());
-            Color color = caretEvent.getEditor().getColorsScheme().getDefaultForeground();
+            Color color;
+            if (Config.IS_COLORFUL)
+                color = ColorFactory.gen(); //生成一个随机颜色
+            else
+                color = caretEvent.getEditor().getColorsScheme().getDefaultForeground();
             int fontSize = caretEvent.getEditor().getContentComponent().getFont().getSize();
 
             if (ParticlePanel.getInstance().isEnable())

@@ -1,55 +1,59 @@
 <idea-plugin version="2">
-  <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
-  <name>activate-power-mode</name>
-  <version>0.0.6</version>
-  <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
+    <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
+    <name>activate-power-mode</name>
+    <version>0.0.7</version>
+    <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
 
-  <description><![CDATA[
+    <description><![CDATA[
       Enter short description for your plugin here.<br>
       <em>most HTML tags may be used</em>
     ]]></description>
 
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
       Add change notes here.<br>
       <em>most HTML tags may be used</em>
     ]]>
-  </change-notes>
+    </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="141.0"/>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="141.0"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
-  <depends>com.intellij.modules.lang</depends>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+    <depends>com.intellij.modules.lang</depends>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
 
-  <actions>
-    <!-- Add your actions here -->
-      <group id="ActivatePowerModeGroup" popup="true"
-             text="activate-power-mode">
-          <add-to-group group-id="WindowMenu" anchor="first"/>
+    <actions>
+        <!-- Add your actions here -->
+        <group id="ActivatePowerModeGroup" popup="true"
+               text="activate-power-mode">
+            <add-to-group group-id="WindowMenu" anchor="first"/>
 
-          <action id="ShakeSwitch" class="com.jiyuanime.ShakeSwitchAction" text="shake" description="shake">
-              <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt S"/>
-          </action>
+            <action id="ShakeSwitch" class="com.jiyuanime.ShakeSwitchAction" text="shake" description="shake">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt S"/>
+            </action>
 
-          <action id="ParticleSwitch" class="com.jiyuanime.ParticleSwitchAction" text="particle" description="particle">
-              <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
-          </action>
-      </group>
+            <action id="ParticleSwitch" class="com.jiyuanime.ParticleSwitchAction" text="particle"
+                    description="particle">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
+            </action>
+            <action id="ColorfulSwitch" class="com.jiyuanime.colorful.ColorfulSwitchAction" text="colorful"
+                    description="colorful">
+            </action>
+        </group>
 
 
-  </actions>
+    </actions>
 
-  <application-components>
-    <component>
-      <implementation-class>com.jiyuanime.ActivatePowerModeApplicationPlugin</implementation-class>
-    </component>
-  </application-components>
+    <application-components>
+        <component>
+            <implementation-class>com.jiyuanime.ActivatePowerModeApplicationPlugin</implementation-class>
+        </component>
+    </application-components>
 </idea-plugin>

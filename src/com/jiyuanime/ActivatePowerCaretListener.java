@@ -24,7 +24,6 @@ public class ActivatePowerCaretListener implements com.intellij.openapi.editor.e
             }
         }
 
-        System.out.println("IS_SPARK: " + Config.IS_SPARK);
         if (Config.IS_SPARK) {
             ParticlePanel particlePanel = ParticlePanel.getInstance();
             if (!particlePanel.isEnable()) {

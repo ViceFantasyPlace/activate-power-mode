@@ -1,5 +1,7 @@
 package com.jiyuanime;
 
+import kotlin.Pair;
+
 import javax.swing.*;
 import java.util.*;
 import java.util.Timer;
@@ -64,11 +66,9 @@ public class ShakeManager {
                 mTimer.schedule(new TimerTask() {
                     public void run() {
                         try {
-                            if (mNowEditorJComponent != null)
-                                SwingUtilities.invokeLater(() -> mNowEditorJComponent.setLocation(x, y));
+                            SwingUtilities.invokeLater(new ChangingLocationOfComponent(mNowEditorJComponent, x, y));
                             Thread.sleep(75);
-                            if (mNowEditorJComponent != null)
-                                SwingUtilities.invokeLater(() -> mNowEditorJComponent.setLocation(0, 0));
+                            SwingUtilities.invokeLater(new ChangingLocationOfComponent(mNowEditorJComponent, 0, 0));
                             isShaking = false;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -80,6 +80,26 @@ public class ShakeManager {
             System.out.println("还没初始化 ShakeManager");
         }
 
+    }
+
+    /**
+     * changing the layout location of the JComponent
+     */
+    private class ChangingLocationOfComponent implements Runnable {
+        private final JComponent target;
+        private final Pair<Integer, Integer> location;
+
+        ChangingLocationOfComponent(JComponent component, int x, int y) {
+            target = component;
+            location = new Pair<>(x, y);
+        }
+
+        @Override
+        public void run() {
+            if (target != null){
+                target.setLocation(location.getFirst(), location.getSecond());
+            }
+        }
     }
 
     private int shakeIntensity(int min, int max) {

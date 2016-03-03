@@ -12,10 +12,12 @@ import com.intellij.openapi.actionSystem.Presentation;
  */
 public class ParticleSwitchAction extends AnAction {
 
+    Config.State state = Config.getInstance().state;
+
     public ParticleSwitchAction()
     {
         Presentation presentation = this.getTemplatePresentation();
-        if(Config.IS_SPARK)
+        if(state.IS_SPARK)
         {
             presentation.setIcon(AllIcons.General.InspectionsOK);
         }
@@ -27,7 +29,7 @@ public class ParticleSwitchAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        if(Config.IS_SPARK)
+        if(state.IS_SPARK)
         {
             this._disable(e.getPresentation());
         }
@@ -39,13 +41,13 @@ public class ParticleSwitchAction extends AnAction {
 
     private void _disable(Presentation presentation)
     {
-        Config.IS_SPARK = false;
+        state.IS_SPARK = false;
         presentation.setIcon(null);
     }
 
     private void _enable(Presentation presentation)
     {
-        Config.IS_SPARK = true;
+        state.IS_SPARK = true;
         presentation.setIcon(AllIcons.General.InspectionsOK);
     }
 }

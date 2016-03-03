@@ -18,13 +18,15 @@ public class ActivatePowerCaretListener implements com.intellij.openapi.editor.e
         JComponent jContentComponent = nowEditor.getContentComponent();
         JComponent jComponent = nowEditor.getComponent();
 
-        if (Config.IS_SHAKE) {
+        Config.State state = Config.getInstance().state;
+
+        if (state.IS_SHAKE) {
             if (ShakeManager.getInstance().getNowEditorJComponent() != jComponent) {
                 ShakeManager.getInstance().reset(jComponent);
             }
         }
 
-        if (Config.IS_SPARK) {
+        if (state.IS_SPARK) {
             ParticlePanel particlePanel = ParticlePanel.getInstance();
             if (!particlePanel.isEnable()) {
                 particlePanel.init(jContentComponent);
@@ -39,7 +41,7 @@ public class ActivatePowerCaretListener implements com.intellij.openapi.editor.e
 
             Point point = nowEditor.logicalPositionToXY(caretEvent.getNewPosition());
             Color color;
-            if (Config.IS_COLORFUL)
+            if (state.IS_COLORFUL)
                 color = ColorFactory.gen(); //生成一个随机颜色
             else
                 color = caretEvent.getEditor().getColorsScheme().getDefaultForeground();

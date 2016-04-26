@@ -12,10 +12,12 @@ import com.intellij.openapi.actionSystem.Presentation;
  */
 public class ShakeSwitchAction extends AnAction {
 
+    Config.State state = Config.getInstance().state;
+
     public ShakeSwitchAction()
     {
         Presentation presentation = this.getTemplatePresentation();
-        if(Config.IS_SHAKE)
+        if(state.IS_SHAKE)
         {
             presentation.setIcon(AllIcons.General.InspectionsOK);
         }
@@ -27,7 +29,7 @@ public class ShakeSwitchAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        if(Config.IS_SHAKE)
+        if(state.IS_SHAKE)
         {
             this._disable(e.getPresentation());
         }
@@ -39,13 +41,13 @@ public class ShakeSwitchAction extends AnAction {
 
     private void _disable(Presentation presentation)
     {
-        Config.IS_SHAKE = false;
+        state.IS_SHAKE = false;
         presentation.setIcon(null);
     }
 
     private void _enable(Presentation presentation)
     {
-        Config.IS_SHAKE = true;
+        state.IS_SHAKE = true;
         presentation.setIcon(AllIcons.General.InspectionsOK);
     }
 }

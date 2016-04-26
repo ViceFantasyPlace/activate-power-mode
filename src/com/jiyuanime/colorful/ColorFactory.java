@@ -1,5 +1,7 @@
 package com.jiyuanime.colorful;
 
+import com.intellij.ui.JBColor;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -14,13 +16,13 @@ public class ColorFactory {
 
     private static void fill() {
         if (colors.size() == 0) {
-            colors.add(Color.RED);
-            colors.add(Color.ORANGE);
-            colors.add(Color.YELLOW);
-            colors.add(Color.GREEN);
-            colors.add(Color.CYAN);
-            colors.add(Color.BLUE);
-            colors.add(Color.MAGENTA);
+            colors.add(JBColor.RED);
+            colors.add(JBColor.ORANGE);
+            colors.add(JBColor.YELLOW);
+            colors.add(JBColor.GREEN);
+            colors.add(JBColor.CYAN);
+            colors.add(JBColor.BLUE);
+            colors.add(JBColor.MAGENTA);
         }
     }
 

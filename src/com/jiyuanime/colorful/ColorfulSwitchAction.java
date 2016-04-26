@@ -13,9 +13,11 @@ import com.jiyuanime.Config;
  */
 public class ColorfulSwitchAction extends AnAction {
 
+    Config.State state = Config.getInstance().state;
+
     public ColorfulSwitchAction() {
         Presentation presentation = this.getTemplatePresentation();
-        if (Config.IS_COLORFUL) {
+        if (state.IS_COLORFUL) {
             presentation.setIcon(AllIcons.General.InspectionsOK);
         } else {
             presentation.setIcon(null);
@@ -24,7 +26,7 @@ public class ColorfulSwitchAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        if (Config.IS_COLORFUL) {
+        if (state.IS_COLORFUL) {
             this._disable(e.getPresentation());
         } else {
             this._enable(e.getPresentation());
@@ -32,12 +34,12 @@ public class ColorfulSwitchAction extends AnAction {
     }
 
     private void _disable(Presentation presentation) {
-        Config.IS_COLORFUL = false;
+        state.IS_COLORFUL = false;
         presentation.setIcon(null);
     }
 
     private void _enable(Presentation presentation) {
-        Config.IS_COLORFUL = true;
+        state.IS_COLORFUL = true;
         presentation.setIcon(AllIcons.General.InspectionsOK);
     }
 }

@@ -22,7 +22,10 @@ public class ActivatePowerDocumentListener implements DocumentListener {
 
     @Override
     public void documentChanged(DocumentEvent documentEvent) {
-        if (Config.IS_SHAKE) {
+
+        Config.State state = Config.getInstance().state;
+
+        if (state.IS_SHAKE) {
             if (ShakeManager.getInstance().isEnable() && !ShakeManager.getInstance().isShaking())
                 ShakeManager.getInstance().shake();
         }

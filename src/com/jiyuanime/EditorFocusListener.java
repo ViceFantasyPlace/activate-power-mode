@@ -22,10 +22,12 @@ public class EditorFocusListener implements EditorFactoryListener {
         JComponent jContentComponent = editor.getContentComponent();
         JComponent jComponent = editor.getComponent();
 
-        if (Config.IS_SHAKE)
+        Config.State state = Config.getInstance().state;
+
+        if (state.IS_SHAKE)
             ShakeManager.getInstance().init(jComponent);
 
-        if (Config.IS_SPARK) {
+        if (state.IS_SPARK) {
             ParticlePanel particlePanel = ParticlePanel.getInstance();
             if (!particlePanel.isEnable()) {
                 particlePanel.init(jContentComponent);

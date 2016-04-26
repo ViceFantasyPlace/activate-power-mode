@@ -26,7 +26,7 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <applicationService serviceInterface="com.jiyuanime.Config" serviceImplementation="com.jiyuanime.Config"/>
     </extensions>
 
     <actions>

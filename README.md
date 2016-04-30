@@ -12,3 +12,5 @@ activate-power-mode for IDEA
 >-> add a new Plugin Configuration <br>
 >-> 在 Use classpath of module 选择 activate-power-mode <br>
 >-> Apply <br>
+
+![PREVIEW](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview.gif?raw=true) 

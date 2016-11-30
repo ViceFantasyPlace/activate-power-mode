@@ -3,8 +3,9 @@ package com.jiyuanime.colorful;
 import com.intellij.ui.JBColor;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by hentai_mew on 15-12-24.

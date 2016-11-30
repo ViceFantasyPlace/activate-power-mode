@@ -2,34 +2,36 @@ package com.jiyuanime;
 
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.editor.EditorFactory;
+import com.jiyuanime.listener.ActivatePowerCaretListener;
+import com.jiyuanime.listener.ActivatePowerDocumentListener;
+import com.jiyuanime.listener.ActivatePowerEditorFocusListener;
+import com.jiyuanime.particle.ParticlePanel;
+import com.jiyuanime.shake.ShakeManager;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * com.jiyuanime.ActivatePowerModeApplicationPlugin
- *
+ * <p>
  * Created by suika on 15-12-13.
  */
 public class ActivatePowerModeApplicationPlugin implements ApplicationComponent {
 
-    EditorFocusListener editorFocusListener;
-    ActivatePowerDocumentListener mActivatePowerDocumentListener;
-    ActivatePowerCaretListener mActivatePowerCaretListener;
+    private ActivatePowerEditorFocusListener mActivatePowerEditorFocusListener;
+    private ActivatePowerDocumentListener mActivatePowerDocumentListener;
+    private ActivatePowerCaretListener mActivatePowerCaretListener;
 
     public ActivatePowerModeApplicationPlugin() {
     }
 
     @Override
     public void initComponent() {
-        editorFocusListener = new EditorFocusListener();
+        mActivatePowerEditorFocusListener = new ActivatePowerEditorFocusListener();
         mActivatePowerDocumentListener = new ActivatePowerDocumentListener();
         mActivatePowerCaretListener = new ActivatePowerCaretListener();
 
-        EditorFactory.getInstance().addEditorFactoryListener(editorFocusListener, () -> {});
-
+        EditorFactory.getInstance().addEditorFactoryListener(mActivatePowerEditorFocusListener, () -> {});
         EditorFactory.getInstance().getEventMulticaster().addDocumentListener(mActivatePowerDocumentListener);
-
         EditorFactory.getInstance().getEventMulticaster().addCaretListener(mActivatePowerCaretListener);
-
     }
 
     @Override
@@ -38,7 +40,7 @@ public class ActivatePowerModeApplicationPlugin implements ApplicationComponent 
 
         EditorFactory.getInstance().getEventMulticaster().removeDocumentListener(mActivatePowerDocumentListener);
         EditorFactory.getInstance().getEventMulticaster().removeCaretListener(mActivatePowerCaretListener);
-        EditorFactory.getInstance().removeEditorFactoryListener(editorFocusListener);
+        EditorFactory.getInstance().removeEditorFactoryListener(mActivatePowerEditorFocusListener);
 
         ShakeManager.getInstance().destroy();
         ParticlePanel.getInstance().destroy();

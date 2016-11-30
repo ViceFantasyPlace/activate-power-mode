@@ -1,20 +1,21 @@
-package com.jiyuanime;
+package com.jiyuanime.listener;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.EditorFactoryEvent;
 import com.intellij.openapi.editor.event.EditorFactoryListener;
-import com.intellij.openapi.editor.event.EditorMouseEvent;
-import com.intellij.openapi.editor.event.EditorMouseListener;
+import com.jiyuanime.config.Config;
+import com.jiyuanime.particle.ParticlePanel;
+import com.jiyuanime.shake.ShakeManager;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 /**
  * 编辑界面获焦监听
- *
+ * <p>
  * Created by suika on 15-12-13.
  */
-public class EditorFocusListener implements EditorFactoryListener {
+public class ActivatePowerEditorFocusListener implements EditorFactoryListener {
 
     @Override
     public void editorCreated(@NotNull EditorFactoryEvent editorFactoryEvent) {

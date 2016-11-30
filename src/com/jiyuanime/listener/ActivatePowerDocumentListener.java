@@ -1,16 +1,14 @@
-package com.jiyuanime;
+package com.jiyuanime.listener;
 
 
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
-
-import javax.swing.*;
-import java.util.Timer;
-import java.util.TimerTask;
+import com.jiyuanime.config.Config;
+import com.jiyuanime.shake.ShakeManager;
 
 /**
  * 震动文本监听接口
- *
+ * <p>
  * Created by suika on 15-12-13.
  */
 public class ActivatePowerDocumentListener implements DocumentListener {

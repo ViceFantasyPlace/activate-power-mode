@@ -1,4 +1,4 @@
-package com.jiyuanime;
+package com.jiyuanime.particle;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
@@ -8,15 +8,15 @@ import java.awt.color.ColorSpace;
  *
  * Created by KADO on 15/12/15.
  */
-public class ParticleView {
+class ParticleView {
     public static final int PARTICLE_WIDTH = 3;
 
-    private Point mPoint;
-    Color mColor;
-    float mAlpha;
+    public Color mColor;
+    public float mAlpha;
+    public float x, y;
+    public float vX, vY;
 
-    float x, y;
-    float vX, vY;
+    public Point mPoint;
 
     private boolean isEnable = false;
 
@@ -24,23 +24,21 @@ public class ParticleView {
         init(point, color, isEnable);
     }
 
-    public void reset(Point point, Color color, boolean isEnable) {
-        init(point, color, isEnable);
-    }
-
-    private void init(Point point, Color color, boolean isEnable) {
+    public void init(Point point, Color color, boolean isEnable) {
         this.isEnable = isEnable;
-
         this.mPoint = point;
+        this.mColor = color;
+        this.mAlpha = 1.0f;
 
         x = (float) this.mPoint.getX();
         y = (float) this.mPoint.getY();
 
-        this.mColor = color;
-        this.mAlpha = 1.0f;
+        vX = (float) (-1.0 + ((Math.round(Math.random() * 100)) / 100.0) * 2);
+        vY = (float) (-3.5 + ((Math.round(Math.random() * 100)) / 100.0) * 2);
+    }
 
-        vX = (float) (-1.0 + ((Math.round(Math.random()*100)) / 100.0) * 2);
-        vY = (float) (-3.5 + ((Math.round(Math.random()*100)) / 100.0) * 2);
+    public void reset(Point point, Color color, boolean isEnable) {
+        init(point, color, isEnable);
     }
 
     public void update() {

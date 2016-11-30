@@ -1,4 +1,4 @@
-package com.jiyuanime;
+package com.jiyuanime.particle;
 
 import java.awt.*;
 

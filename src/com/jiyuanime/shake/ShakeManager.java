@@ -1,10 +1,10 @@
-package com.jiyuanime;
+package com.jiyuanime.shake;
 
 import kotlin.Pair;
 
 import javax.swing.*;
-import java.util.*;
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 震动控制器
@@ -12,8 +12,8 @@ import java.util.Timer;
  * Created by KADO on 15/12/15.
  */
 public class ShakeManager {
-    final int SHAKE_MIN = 1;
-    final int SHAKE_MAX = 3;
+    private static final int SHAKE_MIN = 1;
+    private static final int SHAKE_MAX = 3;
 
     private static ShakeManager mShakeManager;
 
@@ -30,7 +30,7 @@ public class ShakeManager {
         return mShakeManager;
     }
 
-    private ShakeManager() {}
+    public ShakeManager() {}
 
     public void init(JComponent jComponent) {
         this.mNowEditorJComponent = jComponent;
@@ -51,7 +51,6 @@ public class ShakeManager {
 
     public void destroy() {
         clear();
-
         mTimer = null;
     }
 
@@ -96,7 +95,7 @@ public class ShakeManager {
 
         @Override
         public void run() {
-            if (target != null){
+            if (target != null) {
                 target.setLocation(location.getFirst(), location.getSecond());
             }
         }
@@ -104,7 +103,7 @@ public class ShakeManager {
 
     private int shakeIntensity(int min, int max) {
         int direction = Math.random() > 0.5 ? -1 : 1;
-        return ((int) Math.round(Math.random()*(max-min)+min)) * direction;
+        return ((int) Math.round(Math.random() * (max - min) + min)) * direction;
     }
 
     public boolean isShaking() {

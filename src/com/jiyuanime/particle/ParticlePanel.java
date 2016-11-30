@@ -1,4 +1,4 @@
-package com.jiyuanime;
+package com.jiyuanime.particle;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -7,16 +7,16 @@ import java.awt.image.BufferedImage;
 
 /**
  * 粒子容器
- *
+ * <p>
  * Created by KADO on 15/12/15.
  */
-public class ParticlePanel implements Runnable, Border{
-    private static ParticlePanel mParticlePanel;
-
+public class ParticlePanel implements Runnable, Border {
     private static final int MAX_PARTICLE_COUNT = 100;
 
-    private java.util.HashMap<String, ParticleView> mParticleViews = new java.util.HashMap<>();
+    private static ParticlePanel mParticlePanel;
+
     private int mParticleIndex = 0;
+    private java.util.HashMap<String, ParticleView> mParticleViews = new java.util.HashMap<>();
 
     private JComponent mNowEditorJComponent;
 
@@ -42,7 +42,7 @@ public class ParticlePanel implements Runnable, Border{
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        while(isEnable){
+        while (isEnable) {
             if (mParticleAreaGraphics != null) {
 
                 mParticleAreaGraphics.setBackground(new Color(0x00FFFFFF, true));
@@ -62,12 +62,33 @@ public class ParticlePanel implements Runnable, Border{
                     mNowEditorJComponent.repaint();
             }
 
-            try{
+            try {
                 Thread.sleep(35);
-            }catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+        if (mParticleAreaImage == null)
+            return;
+
+        Graphics2D graphics2 = (Graphics2D) g;
+        graphics2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+        Point point = ParticlePositionCalculateUtil.getParticleAreaPositionOnEditorArea(mCaretPoint, mParticleAreaWidth, mParticleAreaHeight);
+        graphics2.drawImage(mParticleAreaImage, point.x, point.y, c);
+    }
+
+    @Override
+    public Insets getBorderInsets(Component c) {
+        return new Insets(0, 0, 0, 0);
+    }
+
+    @Override
+    public boolean isBorderOpaque() {
+        return true;
     }
 
     public void init(JComponent jComponent) {
@@ -82,13 +103,48 @@ public class ParticlePanel implements Runnable, Border{
         mNowEditorJComponent = jComponent;
 
         updateDrawer(jComponent);
-
     }
 
     public void reset(JComponent jComponent) {
         clear();
         init(jComponent);
         setEnableAction(true);
+    }
+
+    public void clear() {
+        isEnable = false;
+
+        if (mPThread != null) {
+            mPThread.suspend();
+            mPThread = null;
+        }
+
+        if (mNowEditorJComponent != null) {
+            mNowEditorJComponent.setBorder(null);
+            mNowEditorJComponent = null;
+        }
+
+        if (mParticleAreaGraphics != null)
+            mParticleAreaGraphics = null;
+
+        if (mParticleAreaImage != null)
+            mParticleAreaImage = null;
+    }
+
+    public void destroy() {
+        clear();
+
+        mParticleViews.clear();
+        mParticleViews = null;
+    }
+
+    public void update(ParticleView particleView) {
+        if (particleView.mAlpha <= 0.1) {
+            particleView.setEnable(false);
+            return;
+        }
+
+        particleView.update();
     }
 
     public void updateDrawer(Component jComponent) {
@@ -102,6 +158,31 @@ public class ParticlePanel implements Runnable, Border{
         mParticleAreaGraphics.dispose();
         mParticleAreaGraphics = mParticleAreaImage.createGraphics();
         /** 设置 透明窗体背景 END */
+    }
+
+    private void particlesDeviation(Point speed) {
+        for (String key : mParticleViews.keySet()) {
+            ParticleView particle = mParticleViews.get(key);
+            particle.setX(particle.x - speed.x);
+            particle.setY(particle.y - speed.y);
+        }
+    }
+
+    public void setEnableAction(boolean isEnable) {
+        this.isEnable = isEnable;
+        if (this.isEnable) {
+            if (mParticleAreaImage != null && mParticleAreaGraphics != null && mNowEditorJComponent != null) {
+                if (mPThread == null) {
+                    mPThread = new Thread(this);
+                }
+                mPThread.start();
+            } else {
+                this.isEnable = false;
+                System.out.println("还没初始化 ParticlePanel");
+            }
+        } else {
+            destroy();
+        }
     }
 
     public void sparkAtPosition(Point position, Color color, int fontSize) {
@@ -132,61 +213,8 @@ public class ParticlePanel implements Runnable, Border{
         }
     }
 
-    public void update(ParticleView particleView) {
-        if (particleView.mAlpha <= 0.1) {
-            particleView.setEnable(false);
-            return;
-        }
-
-        particleView.update();
-    }
-
-    public void setEnableAction(boolean isEnable) {
-        this.isEnable = isEnable;
-        if (this.isEnable) {
-            if (mParticleAreaImage != null && mParticleAreaGraphics != null && mNowEditorJComponent != null) {
-                if (mPThread == null) {
-                    mPThread = new Thread(this);
-                }
-                mPThread.start();
-            } else {
-                this.isEnable = false;
-                System.out.println("还没初始化 ParticlePanel");
-            }
-        } else {
-            destroy();
-        }
-    }
-
     public boolean isEnable() {
         return isEnable;
-    }
-
-    public void clear() {
-        isEnable = false;
-
-        if (mPThread != null) {
-            mPThread.suspend();
-            mPThread = null;
-        }
-
-        if (mNowEditorJComponent != null) {
-            mNowEditorJComponent.setBorder(null);
-            mNowEditorJComponent = null;
-        }
-
-        if (mParticleAreaGraphics != null)
-            mParticleAreaGraphics = null;
-
-        if (mParticleAreaImage != null)
-            mParticleAreaImage = null;
-    }
-
-    public void destroy() {
-        clear();
-
-        mParticleViews.clear();
-        mParticleViews = null;
     }
 
     public JComponent getNowEditorJComponent() {
@@ -197,31 +225,4 @@ public class ParticlePanel implements Runnable, Border{
         mNowEditorJComponent = nowEditorJComponent;
     }
 
-    private void particlesDeviation(Point speed) {
-        for (String key : mParticleViews.keySet()) {
-            ParticleView particle = mParticleViews.get(key);
-            particle.setX(particle.x - speed.x);
-            particle.setY(particle.y - speed.y);
-        }
-    }
-
-    @Override
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        if (mParticleAreaImage == null) { return;}
-
-        Graphics2D graphics2 = (Graphics2D) g;
-        graphics2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
-        Point point = ParticlePositionCalculateUtil.getParticleAreaPositionOnEditorArea(mCaretPoint, mParticleAreaWidth, mParticleAreaHeight);
-        graphics2.drawImage(mParticleAreaImage, point.x, point.y, c);
-    }
-
-    @Override
-    public Insets getBorderInsets(Component c) {
-        return new Insets(0, 0, 0, 0);
-    }
-
-    @Override
-    public boolean isBorderOpaque() {
-        return true;
-    }
 }

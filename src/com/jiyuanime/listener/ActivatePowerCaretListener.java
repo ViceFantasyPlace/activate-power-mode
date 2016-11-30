@@ -1,7 +1,10 @@
-package com.jiyuanime;
+package com.jiyuanime.listener;
 
 import com.intellij.openapi.editor.Editor;
+import com.jiyuanime.config.Config;
 import com.jiyuanime.colorful.ColorFactory;
+import com.jiyuanime.particle.ParticlePanel;
+import com.jiyuanime.shake.ShakeManager;
 
 import javax.swing.*;
 import java.awt.*;

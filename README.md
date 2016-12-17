@@ -6,6 +6,10 @@ activate-power-mode for IDEA
 
 ![PREVIEW](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview.gif?raw=true) 
 
+使用
+-------
+####安装 activate-power-mode 之后 到 Window > activate-power-mode 就可以开启或者关闭相对应的效果
+
 开发
 -------
 

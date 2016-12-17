@@ -5,7 +5,7 @@ import java.awt.color.ColorSpace;
 
 /**
  * 粒子类
- *
+ * <p>
  * Created by KADO on 15/12/15.
  */
 class ParticleView {

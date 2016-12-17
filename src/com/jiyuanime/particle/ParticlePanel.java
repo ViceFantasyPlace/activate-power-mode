@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 粒子容器
@@ -16,7 +17,7 @@ public class ParticlePanel implements Runnable, Border {
     private static ParticlePanel mParticlePanel;
 
     private int mParticleIndex = 0;
-    private java.util.HashMap<String, ParticleView> mParticleViews = new java.util.HashMap<>();
+    private ConcurrentHashMap<String, ParticleView> mParticleViews = new ConcurrentHashMap<>();
 
     private JComponent mNowEditorJComponent;
 
@@ -25,6 +26,8 @@ public class ParticlePanel implements Runnable, Border {
     private Graphics2D mParticleAreaGraphics;
     private Point mCaretPoint = new Point();
     private Point mParticleAreaSpeed = new Point();
+
+    private Point mCurrentCaretPosition = null;
 
     private Thread mPThread;
 
@@ -37,7 +40,8 @@ public class ParticlePanel implements Runnable, Border {
         return mParticlePanel;
     }
 
-    private ParticlePanel() {}
+    private ParticlePanel() {
+    }
 
     @Override
     public void run() {
@@ -93,6 +97,11 @@ public class ParticlePanel implements Runnable, Border {
 
     public void init(JComponent jComponent) {
 
+        if (mParticleViews == null) {
+            mParticleIndex = 0;
+            mParticleViews = new ConcurrentHashMap<>();
+        }
+
         if (mPThread == null)
             mPThread = new Thread(this);
 
@@ -100,6 +109,7 @@ public class ParticlePanel implements Runnable, Border {
             mNowEditorJComponent.setBorder(null);
             mNowEditorJComponent = null;
         }
+
         mNowEditorJComponent = jComponent;
 
         updateDrawer(jComponent);
@@ -134,7 +144,8 @@ public class ParticlePanel implements Runnable, Border {
     public void destroy() {
         clear();
 
-        mParticleViews.clear();
+        if (mParticleViews != null)
+            mParticleViews.clear();
         mParticleViews = null;
     }
 
@@ -213,6 +224,13 @@ public class ParticlePanel implements Runnable, Border {
         }
     }
 
+    public void sparkAtPositionAction(Color color, int fontSize) {
+        if (mCurrentCaretPosition != null) {
+            sparkAtPosition(mCurrentCaretPosition, color, fontSize);
+            mCurrentCaretPosition = null;
+        }
+    }
+
     public boolean isEnable() {
         return isEnable;
     }
@@ -221,8 +239,8 @@ public class ParticlePanel implements Runnable, Border {
         return mNowEditorJComponent;
     }
 
-    public void setNowEditorJComponent(JComponent nowEditorJComponent) {
-        mNowEditorJComponent = nowEditorJComponent;
+    public void setCurrentCaretPosition(Point currentCaretPosition) {
+        if (mCurrentCaretPosition == null)
+            mCurrentCaretPosition = currentCaretPosition;
     }
-
 }

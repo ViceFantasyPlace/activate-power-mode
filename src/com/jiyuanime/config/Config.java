@@ -37,6 +37,8 @@ public class Config implements PersistentStateComponent<Config.State> {
 
     public Config() {
 
+        state.IS_ENABLE = false;
+
         state.IS_SPARK = true;
 
         state.IS_SHAKE = true;
@@ -50,6 +52,11 @@ public class Config implements PersistentStateComponent<Config.State> {
     }
 
     public static final class State {
+
+        /**
+         * 是否开启
+         */
+        public boolean IS_ENABLE;
 
         /**
          * 是否震动

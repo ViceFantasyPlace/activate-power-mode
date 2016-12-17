@@ -1,13 +1,14 @@
 <idea-plugin version="2">
     <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
     <name>activate-power-mode</name>
-    <version>0.0.8</version>
+    <version>0.1.0</version>
     <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
 
     <description><![CDATA[
       Enter short description for your plugin here.<br>
       <em>most HTML tags may be used</em>
-    ]]></description>
+    ]]>
+    </description>
 
     <change-notes><![CDATA[
       Add change notes here.<br>
@@ -36,6 +37,11 @@
                text="activate-power-mode">
             <add-to-group group-id="WindowMenu" anchor="first"/>
 
+            <action id="ActivatePowerEnable" class="com.jiyuanime.action.ActivatePowerEnableAction" text="disable"
+                    description="disable">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt A"/>
+            </action>
+
             <action id="ShakeSwitch" class="com.jiyuanime.action.ShakeSwitchAction" text="shake" description="shake">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt S"/>
             </action>
@@ -48,7 +54,6 @@
                     description="colorful">
             </action>
         </group>
-
 
     </actions>
 

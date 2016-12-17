@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 /**
  * 震动控制器
- *
+ * <p>
  * Created by KADO on 15/12/15.
  */
 public class ShakeManager {
@@ -30,7 +30,8 @@ public class ShakeManager {
         return mShakeManager;
     }
 
-    public ShakeManager() {}
+    public ShakeManager() {
+    }
 
     public void init(JComponent jComponent) {
         this.mNowEditorJComponent = jComponent;
@@ -110,23 +111,12 @@ public class ShakeManager {
         return isShaking;
     }
 
-    public void setShaking(boolean shaking) {
-        isShaking = shaking;
-    }
-
     public JComponent getNowEditorJComponent() {
         return mNowEditorJComponent;
-    }
-
-    public void setNowEditorJComponent(JComponent nowEditorJComponent) {
-        mNowEditorJComponent = nowEditorJComponent;
     }
 
     public boolean isEnable() {
         return isEnable;
     }
 
-    public void setEnable(boolean enable) {
-        isEnable = enable;
-    }
 }

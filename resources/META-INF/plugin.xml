@@ -1,19 +1,22 @@
 <idea-plugin version="2">
     <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
     <name>activate-power-mode</name>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
 
-    <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
+    <description>
+        <![CDATA[
+          activate-power-mode for IDEA<br>
+          <em>根据Atom的插件activate-power-mode的效果移植到IDEA上</em>
+        ]]>
     </description>
 
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
+    <change-notes>
+        <![CDATA[
+          Change Notes<br>
+          <em>1.修改监听Editor的方式，只监听文件编辑的Editor，避免了有些需要调试的窗口都有震动和粒子效果</em>
+          <em>2.整理了项目的目录结构</em>
+        ]]>
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->

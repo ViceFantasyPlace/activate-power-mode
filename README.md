@@ -4,6 +4,11 @@ activate-power-mode
 activate-power-mode for IDEA
 -------
 
+![PREVIEW](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview.gif?raw=true) 
+
+开发
+-------
+
 ####下载
 >git clone https://github.com/ViceFantasyPlace/activate-power-mode.git
 
@@ -13,4 +18,17 @@ activate-power-mode for IDEA
 >-> 在 Use classpath of module 选择 activate-power-mode <br>
 >-> Apply <br>
 
-![PREVIEW](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview.gif?raw=true) 
+安装
+-------
+
+####下载jar包
+[在Jetbrains plugin repositories上下载](https://plugins.jetbrains.com/plugin/8330?pr=idea)
+
+[直接在release下载](https://github.com/ViceFantasyPlace/activate-power-mode/releases)
+
+####安装 Plugin jar包
+>Preferences/Plugins <br>
+>-> Install plugin from disk <br>
+>-> 选择 jar文件 <br>
+>-> Apply <br>
+>-> 重启编辑器 <br>

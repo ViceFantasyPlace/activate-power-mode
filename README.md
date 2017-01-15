@@ -6,6 +6,14 @@ activate-power-mode for IDEA
 
 ![PREVIEW](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview.gif?raw=true) 
 
+
+Features.
+-------
+ - 把Combo, MaxCombo 可视化出来
+ - 做设置数据持久化
+ - 增加设置参数界面
+ 
+
 使用
 -------
 ####安装 activate-power-mode 之后 到 Window > activate-power-mode 就可以开启或者关闭相对应的效果

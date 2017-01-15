@@ -37,7 +37,7 @@ public class Config implements PersistentStateComponent<Config.State> {
 
     public Config() {
 
-        state.IS_ENABLE = false;
+        state.IS_ENABLE = true;
 
         state.IS_SPARK = true;
 
@@ -72,6 +72,21 @@ public class Config implements PersistentStateComponent<Config.State> {
          * 色彩鲜艳的配置项
          */
         public boolean IS_COLORFUL;
+
+        /**
+         * 开启效果的界限
+         */
+        public int OPEN_FUNCTION_BORDER = 30;
+
+        /**
+         * 敲击的时间间隔
+         */
+        public long CLICK_TIME_INTERVAL = 7777;
+
+        /**
+         * 敲击的最大连击数
+         */
+        public int MAX_CLICK_COMBO;
     }
 
 

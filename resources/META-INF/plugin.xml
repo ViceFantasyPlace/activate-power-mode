@@ -1,21 +1,32 @@
 <idea-plugin version="2">
     <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
     <name>activate-power-mode</name>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
 
     <description>
         <![CDATA[
-          activate-power-mode for IDEA<br>
-          <em>根据Atom的插件activate-power-mode的效果移植到IDEA上</em>
+          <h3>activate-power-mode for IDEA.</h3>
+          <ul>
+			<li>根据Atom的插件activate-power-mode的效果移植到IDEA上</li>
+		  </ul>
         ]]>
     </description>
 
     <change-notes>
         <![CDATA[
-          Change Notes<br>
-          <em>1.修改监听Editor的方式，只监听文件编辑的Editor，避免了有些需要调试的窗口都有震动和粒子效果</em>
-          <em>2.整理了项目的目录结构</em>
+          <h3>v0.1.2</h3>
+          <ul>
+            <li>增加一个Combo值，达到一定Combo值自动开启效果</li>
+            <li>优化多个Project和多个Editor的情况实现</li>
+          </ul>
+
+          <h3>Features.</h3>
+          <ul
+            <li>把Combo, MaxCombo 可视化出来</li>
+            <li>做设置数据持久化</li>
+            <li>增加设置参数界面</li>
+          </ul>
         ]]>
     </change-notes>
 
@@ -40,8 +51,8 @@
                text="activate-power-mode">
             <add-to-group group-id="WindowMenu" anchor="first"/>
 
-            <action id="ActivatePowerEnable" class="com.jiyuanime.action.ActivatePowerEnableAction" text="disable"
-                    description="disable">
+            <action id="ActivatePowerEnable" class="com.jiyuanime.action.ActivatePowerEnableAction" text="enable"
+                    description="enable">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt A"/>
             </action>
 

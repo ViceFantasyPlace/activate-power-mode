@@ -57,7 +57,8 @@ public class ActivatePowerModeManage {
                 public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                     super.fileClosed(source, file);
 
-                    mActivatePowerDocumentListener.clean(FileDocumentManager.getInstance().getDocument(file));
+                    if (mActivatePowerDocumentListener != null)
+                        mActivatePowerDocumentListener.clean(FileDocumentManager.getInstance().getDocument(file), true);
                 }
 
                 @Override
@@ -158,7 +159,22 @@ public class ActivatePowerModeManage {
     private void destroyProjectMessageBus() {
         if (mProject != null) {
             MessageBusConnection connection = mProject.getMessageBus().connect();
-            connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER);
+            connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerAdapter() {
+                @Override
+                public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
+                    super.fileOpened(source, file);
+                }
+
+                @Override
+                public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
+                    super.fileClosed(source, file);
+                }
+
+                @Override
+                public void selectionChanged(@NotNull FileEditorManagerEvent event) {
+                    super.selectionChanged(event);
+                }
+            });
         }
         mProject = null;
     }

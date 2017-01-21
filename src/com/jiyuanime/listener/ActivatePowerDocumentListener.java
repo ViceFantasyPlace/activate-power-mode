@@ -106,26 +106,32 @@ public class ActivatePowerDocumentListener implements DocumentListener {
         }
     }
 
-    private void unbindDocument(Document document) {
+    private void unbindDocument(Document document, boolean isRemoveInList) {
         if (document != null && mDocumentList.contains(document)) {
             document.removeDocumentListener(this);
-            mDocumentList.remove(document);
+            if (isRemoveInList)
+                mDocumentList.remove(document);
         }
     }
 
-    public void clean(Document document) {
+    public void clean(Document document, boolean isRemoveInList) {
+        cleanEditorCaret();
+        if (document != null)
+            unbindDocument(document, isRemoveInList);
+    }
+
+    private void cleanEditorCaret() {
         if (mCaretModel != null && mActivatePowerCaretListener != null) {
             mCaretModel.removeCaretListener(mActivatePowerCaretListener);
             mCaretModel = null;
         }
-        if (document != null)
-            unbindDocument(document);
         mEditor = null;
     }
 
     public void destroy() {
         for (Document document : mDocumentList)
-            clean(document);
+            clean(document, false);
+        mDocumentList.clear();
         mActivatePowerCaretListener = null;
         mProject = null;
     }

@@ -53,25 +53,23 @@ public class ActivatePowerDocumentListener implements DocumentListener {
 
         if (manage.getClickCombo() > state.OPEN_FUNCTION_BORDER && mProject != null) {
 
-            if (state.IS_SHAKE) {
-                if (ShakeManager.getInstance().isEnable() && !ShakeManager.getInstance().isShaking())
-                    ShakeManager.getInstance().shake();
-            }
+            Editor selectedTextEditor = FileEditorManager.getInstance(mProject).getSelectedTextEditor();
+            if (mEditor == null || mEditor != selectedTextEditor)
+                mEditor = selectedTextEditor;
+            if (mEditor != null) {
+                manage.resetEditor(mEditor);
 
-            if (state.IS_SPARK) {
+                if (state.IS_SHAKE) {
+                    if (ShakeManager.getInstance().isEnable() && !ShakeManager.getInstance().isShaking())
+                        ShakeManager.getInstance().shake();
+                }
 
-                Editor selectedTextEditor = FileEditorManager.getInstance(mProject).getSelectedTextEditor();
-                if (mEditor == null || mEditor != selectedTextEditor)
-                    mEditor = selectedTextEditor;
-                if (mEditor != null) {
-
-                    manage.resetEditor(mEditor);
-
+                if (state.IS_SPARK) {
                     CaretModel currentCaretModel = mEditor.getCaretModel();
-                    if (mCaretModel == null || mCaretModel != currentCaretModel)
+                    if (mCaretModel == null || mCaretModel != currentCaretModel) {
                         mCaretModel = currentCaretModel;
-
-                    mCaretModel.addCaretListener(mActivatePowerCaretListener);
+                        mCaretModel.addCaretListener(mActivatePowerCaretListener);
+                    }
 
                     Color color;
                     if (state.IS_COLORFUL) {
@@ -86,7 +84,6 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                     if (particlePanel.isEnable()) {
                         particlePanel.sparkAtPositionAction(color, fontSize);
                     }
-
                 }
             }
         }
@@ -134,9 +131,5 @@ public class ActivatePowerDocumentListener implements DocumentListener {
         mDocumentList.clear();
         mActivatePowerCaretListener = null;
         mProject = null;
-    }
-
-    public Project getProject() {
-        return mProject;
     }
 }

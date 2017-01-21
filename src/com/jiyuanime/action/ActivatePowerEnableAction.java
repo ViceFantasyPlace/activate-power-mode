@@ -28,7 +28,7 @@ public class ActivatePowerEnableAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         if (state.IS_ENABLE) {
             disable(e.getPresentation());
-            ActivatePowerModeManage.getInstance().destroy();
+            ActivatePowerModeManage.getInstance().destroyAll();
         } else {
             enable(e.getPresentation());
             ActivatePowerModeManage.getInstance().init(e.getProject());

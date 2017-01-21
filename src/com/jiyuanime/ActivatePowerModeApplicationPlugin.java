@@ -30,7 +30,7 @@ public class ActivatePowerModeApplicationPlugin implements ApplicationComponent 
 
             @Override
             public void projectClosed(Project project) {
-                ActivatePowerModeManage.getInstance().destroy();
+                ActivatePowerModeManage.getInstance().destroy(project, true);
                 super.projectClosed(project);
             }
 
@@ -48,7 +48,7 @@ public class ActivatePowerModeApplicationPlugin implements ApplicationComponent 
 
     @Override
     public void disposeComponent() {
-        ActivatePowerModeManage.getInstance().destroy();
+        ActivatePowerModeManage.getInstance().destroyAll();
     }
 
     @Override

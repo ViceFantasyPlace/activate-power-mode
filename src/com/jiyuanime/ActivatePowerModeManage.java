@@ -10,9 +10,12 @@ import com.jiyuanime.config.Config;
 import com.jiyuanime.listener.ActivatePowerDocumentListener;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 效果管理器
@@ -20,7 +23,7 @@ import javax.swing.*;
  */
 public class ActivatePowerModeManage {
 
-    public static ActivatePowerModeManage sActivatePowerModeManage;
+    private static ActivatePowerModeManage sActivatePowerModeManage;
 
     public static ActivatePowerModeManage getInstance() {
         if (sActivatePowerModeManage == null) {
@@ -31,24 +34,25 @@ public class ActivatePowerModeManage {
 
     private Config.State state = Config.getInstance().state;
 
-    private ActivatePowerDocumentListener mActivatePowerDocumentListener;
-
-    private Project mProject;
+    private HashMap<Project, ActivatePowerDocumentListener> mDocListenerMap = new HashMap<>();
     private Editor mCurrentEditor;
 
     private long mClickTimeStamp;
     private int mClickCombo;
 
     public void init(Project project) {
-        mProject = project;
 
-        if (mProject != null) {
+        if (project != null) {
             // 监听FileEditor的状态
-            MessageBusConnection connection = mProject.getMessageBus().connect();
+            MessageBusConnection connection = project.getMessageBus().connect();
             connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerAdapter() {
                 @Override
                 public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                     super.fileOpened(source, file);
+
+                    destroyShake();
+                    destroyParticle();
+                    mCurrentEditor = null;
 
                     initDocument(source.getProject(), FileDocumentManager.getInstance().getDocument(file));
                 }
@@ -57,8 +61,9 @@ public class ActivatePowerModeManage {
                 public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
                     super.fileClosed(source, file);
 
-                    if (mActivatePowerDocumentListener != null)
-                        mActivatePowerDocumentListener.clean(FileDocumentManager.getInstance().getDocument(file), true);
+                    ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(source.getProject());
+                    if (activatePowerDocumentListener != null)
+                        activatePowerDocumentListener.clean(FileDocumentManager.getInstance().getDocument(file), true);
                 }
 
                 @Override
@@ -69,11 +74,16 @@ public class ActivatePowerModeManage {
                         destroyShake();
                         destroyParticle();
                         mCurrentEditor = null;
+
+                        FileEditorManager fileEditorManager = event.getManager();
+                        VirtualFile virtualFile = event.getNewFile();
+                        if (virtualFile != null)
+                            initDocument(fileEditorManager.getProject(), FileDocumentManager.getInstance().getDocument(virtualFile));
                     }
                 }
             });
 
-            FileEditorManager fileEditorManager = FileEditorManager.getInstance(mProject);
+            FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
 
             if (fileEditorManager != null) {
                 Editor editor = fileEditorManager.getSelectedTextEditor();
@@ -82,12 +92,13 @@ public class ActivatePowerModeManage {
                     destroyParticle();
                     mCurrentEditor = null;
 
-                    initDocument(mProject, editor.getDocument());
+                    initDocument(project, editor.getDocument());
                 }
             }
 
         } else
             System.out.println("ActivatePowerEnableAction " + "初始化数据失败");
+
     }
 
     private void initEditor(Editor editor) {
@@ -98,21 +109,30 @@ public class ActivatePowerModeManage {
     }
 
     private void initDocument(Project project, Document document) {
-        if (document != null && project != null) {
-            if (mActivatePowerDocumentListener == null || mActivatePowerDocumentListener.getProject() != project)
-                mActivatePowerDocumentListener = new ActivatePowerDocumentListener(project);
-
-            if (mActivatePowerDocumentListener.addDocument(document))
-                document.addDocumentListener(mActivatePowerDocumentListener);
+        if (project != null && document != null) {
+            ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(project);
+            if (activatePowerDocumentListener == null) {
+                activatePowerDocumentListener = new ActivatePowerDocumentListener(project);
+                mDocListenerMap.put(project, activatePowerDocumentListener);
+            }
+            if (activatePowerDocumentListener.addDocument(document))
+                document.addDocumentListener(activatePowerDocumentListener);
         }
     }
 
-    public void destroy() {
+    public void destroy(Project project, boolean isRemoveProject) {
         destroyShake();
         destroyParticle();
-        destroyDocumentListener();
+        destroyDocumentListener(project, isRemoveProject);
         mCurrentEditor = null;
-        destroyProjectMessageBus();
+        destroyProjectMessageBus(project, isRemoveProject);
+    }
+
+    public void destroyAll() {
+        for (Project project : mDocListenerMap.keySet()) {
+            destroy(project, false);
+        }
+        mDocListenerMap.clear();
     }
 
     private void initShake(JComponent jComponent) {
@@ -141,10 +161,12 @@ public class ActivatePowerModeManage {
         }
     }
 
-    private void destroyDocumentListener() {
-        if (mActivatePowerDocumentListener != null) {
-            mActivatePowerDocumentListener.destroy();
-            mActivatePowerDocumentListener = null;
+    private void destroyDocumentListener(Project project, boolean isRemoveProject) {
+        ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(project);
+        if (activatePowerDocumentListener != null) {
+            activatePowerDocumentListener.destroy();
+            if (isRemoveProject)
+                mDocListenerMap.remove(project);
         }
     }
 
@@ -156,9 +178,9 @@ public class ActivatePowerModeManage {
         ParticlePanel.getInstance().destroy();
     }
 
-    private void destroyProjectMessageBus() {
-        if (mProject != null) {
-            MessageBusConnection connection = mProject.getMessageBus().connect();
+    private void destroyProjectMessageBus(Project project, boolean isRemoveProject) {
+        if (project != null) {
+            MessageBusConnection connection = project.getMessageBus().connect();
             connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerAdapter() {
                 @Override
                 public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
@@ -176,7 +198,8 @@ public class ActivatePowerModeManage {
                 }
             });
         }
-        mProject = null;
+        if (isRemoveProject)
+            mDocListenerMap.remove(project);
     }
 
     public long getClickTimeStamp() {

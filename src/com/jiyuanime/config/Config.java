@@ -11,15 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * 配置文件
  * Created by KADO on 15/12/17.
  */
-@State(
-        name = "activate-power-mode",
-        storages = {
-                @Storage(
-                        id = "activate-power-mode",
-                        file = "$APP_CONFIG$/activate-power-mode_setting.xml"
-                )
-        }
-)
+@State(name = "activate-power-mode", storages = {@Storage(id = "activate-power-mode", file = "$APP_CONFIG$/activate-power-mode_setting.xml")})
 public class Config implements PersistentStateComponent<Config.State> {
 
     @Nullable
@@ -43,6 +35,8 @@ public class Config implements PersistentStateComponent<Config.State> {
 
         state.IS_SHAKE = true;
 
+        state.IS_COMBO = true;
+
         state.IS_COLORFUL = false;
 
     }
@@ -56,22 +50,22 @@ public class Config implements PersistentStateComponent<Config.State> {
         /**
          * 是否开启
          */
-        public boolean IS_ENABLE;
+        public boolean IS_ENABLE = true;
 
         /**
          * 是否震动
          */
-        public boolean IS_SHAKE;
+        public boolean IS_SHAKE = true;
 
         /**
          * 是否显示火花
          */
-        public boolean IS_SPARK;
+        public boolean IS_SPARK = true;
 
         /**
          * 色彩鲜艳的配置项
          */
-        public boolean IS_COLORFUL;
+        public boolean IS_COLORFUL = false;
 
         /**
          * 开启效果的界限
@@ -87,6 +81,11 @@ public class Config implements PersistentStateComponent<Config.State> {
          * 敲击的最大连击数
          */
         public int MAX_CLICK_COMBO;
+
+        /**
+         * 是否开启 Combo
+         */
+        public boolean IS_COMBO = true;
     }
 
 

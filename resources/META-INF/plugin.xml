@@ -71,9 +71,12 @@
                     description="particle">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
             </action>
+
+            <action id="ComboSwitchAction" class="com.jiyuanime.action.ComboSwitchAction" text="combo"
+                    description="combo"/>
+
             <action id="ColorfulSwitch" class="com.jiyuanime.colorful.ColorfulSwitchAction" text="colorful"
-                    description="colorful">
-            </action>
+                    description="colorful"/>
         </group>
 
     </actions>

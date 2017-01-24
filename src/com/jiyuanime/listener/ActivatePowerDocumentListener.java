@@ -42,51 +42,19 @@ public class ActivatePowerDocumentListener implements DocumentListener {
 
         ActivatePowerModeManage manage = ActivatePowerModeManage.getInstance();
 
-        // 文本变化在 CLICK_TIME_INTERVAL 时间内
-        if (System.currentTimeMillis() - manage.getClickTimeStamp() <= state.CLICK_TIME_INTERVAL) {
-            manage.setClickCombo(manage.getClickCombo() + 1);
-            state.MAX_CLICK_COMBO = manage.getClickCombo() > state.MAX_CLICK_COMBO ? manage.getClickCombo() : state.MAX_CLICK_COMBO;
-        } else
-            manage.setClickCombo(0);
+        if (state.IS_COMBO) {
+            // 文本变化在 CLICK_TIME_INTERVAL 时间内
+            if (System.currentTimeMillis() - manage.getClickTimeStamp() <= state.CLICK_TIME_INTERVAL) {
+                manage.setClickCombo(manage.getClickCombo() + 1);
+                state.MAX_CLICK_COMBO = manage.getClickCombo() > state.MAX_CLICK_COMBO ? manage.getClickCombo() : state.MAX_CLICK_COMBO;
+            } else
+                manage.setClickCombo(0);
 
-        manage.setClickTimeStamp(System.currentTimeMillis());
-
-        if (manage.getClickCombo() > state.OPEN_FUNCTION_BORDER && mProject != null) {
-
-            Editor selectedTextEditor = FileEditorManager.getInstance(mProject).getSelectedTextEditor();
-            if (mEditor == null || mEditor != selectedTextEditor)
-                mEditor = selectedTextEditor;
-            if (mEditor != null) {
-                manage.resetEditor(mEditor);
-
-                if (state.IS_SHAKE) {
-                    if (ShakeManager.getInstance().isEnable() && !ShakeManager.getInstance().isShaking())
-                        ShakeManager.getInstance().shake();
-                }
-
-                if (state.IS_SPARK) {
-                    CaretModel currentCaretModel = mEditor.getCaretModel();
-                    if (mCaretModel == null || mCaretModel != currentCaretModel) {
-                        mCaretModel = currentCaretModel;
-                        mCaretModel.addCaretListener(mActivatePowerCaretListener);
-                    }
-
-                    Color color;
-                    if (state.IS_COLORFUL) {
-                        color = ColorFactory.gen(); // 生成一个随机颜色
-                    } else {
-                        color = mEditor.getColorsScheme().getDefaultForeground();
-                    }
-
-                    int fontSize = mEditor.getContentComponent().getFont().getSize();
-
-                    ParticlePanel particlePanel = ParticlePanel.getInstance();
-                    if (particlePanel.isEnable()) {
-                        particlePanel.sparkAtPositionAction(color, fontSize);
-                    }
-                }
-            }
+            manage.setClickTimeStamp(System.currentTimeMillis());
         }
+
+        if ((state.IS_COMBO && manage.getClickCombo() > state.OPEN_FUNCTION_BORDER && mProject != null) || (!state.IS_COMBO && mProject != null))
+            handleActivatePower(manage);
     }
 
     @Override
@@ -131,5 +99,44 @@ public class ActivatePowerDocumentListener implements DocumentListener {
         mDocumentList.clear();
         mActivatePowerCaretListener = null;
         mProject = null;
+    }
+
+    /**
+     * 处理ActivatePower效果
+     */
+    private void handleActivatePower(ActivatePowerModeManage manage) {
+        Editor selectedTextEditor = FileEditorManager.getInstance(mProject).getSelectedTextEditor();
+        if (mEditor == null || mEditor != selectedTextEditor)
+            mEditor = selectedTextEditor;
+        if (mEditor != null) {
+            manage.resetEditor(mEditor);
+
+            if (state.IS_SHAKE) {
+                if (ShakeManager.getInstance().isEnable() && !ShakeManager.getInstance().isShaking())
+                    ShakeManager.getInstance().shake();
+            }
+
+            if (state.IS_SPARK) {
+                CaretModel currentCaretModel = mEditor.getCaretModel();
+                if (mCaretModel == null || mCaretModel != currentCaretModel) {
+                    mCaretModel = currentCaretModel;
+                    mCaretModel.addCaretListener(mActivatePowerCaretListener);
+                }
+
+                Color color;
+                if (state.IS_COLORFUL) {
+                    color = ColorFactory.gen(); // 生成一个随机颜色
+                } else {
+                    color = mEditor.getColorsScheme().getDefaultForeground();
+                }
+
+                int fontSize = mEditor.getContentComponent().getFont().getSize();
+
+                ParticlePanel particlePanel = ParticlePanel.getInstance();
+                if (particlePanel.isEnable()) {
+                    particlePanel.sparkAtPositionAction(color, fontSize);
+                }
+            }
+        }
     }
 }

@@ -10,11 +10,9 @@ import com.jiyuanime.config.Config;
 import com.jiyuanime.listener.ActivatePowerDocumentListener;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

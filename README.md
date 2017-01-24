@@ -9,6 +9,7 @@ activate-power-mode for IDEA
 
 Features.
 -------
+ - 粒子的颜色根据文本字体的颜色
  - 把Combo, MaxCombo 可视化出来
  - 做设置数据持久化
  - 增加设置参数界面

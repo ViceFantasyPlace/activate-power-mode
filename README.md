@@ -19,17 +19,7 @@ Features.
 -------
 #### 安装 activate-power-mode 之后 到 Window > activate-power-mode 就可以开启或者关闭相对应的效果
 
-开发
--------
 
-#### 下载
->git clone https://github.com/ViceFantasyPlace/activate-power-mode.git
-
-#### 第一次运行如果没有运行配置需要创建一个Plugin的Configuration
->Edit Run/Debug Configurations <br>
->-> add a new Plugin Configuration <br>
->-> 在 Use classpath of module 选择 activate-power-mode <br>
->-> Apply <br>
 
 安装
 -------
@@ -45,3 +35,15 @@ Features.
 >-> 选择 jar文件 <br>
 >-> Apply <br>
 >-> 重启编辑器 <br>
+
+开发
+-------
+
+#### 下载
+>git clone https://github.com/ViceFantasyPlace/activate-power-mode.git
+
+#### 第一次运行如果没有运行配置需要创建一个Plugin的Configuration
+>Edit Run/Debug Configurations <br>
+>-> add a new Plugin Configuration <br>
+>-> 在 Use classpath of module 选择 activate-power-mode <br>
+>-> Apply <br>

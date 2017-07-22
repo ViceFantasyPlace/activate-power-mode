@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
     <name>activate-power-mode</name>
     <version>0.1.3</version>
@@ -50,6 +50,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceInterface="com.jiyuanime.config.Config"
                             serviceImplementation="com.jiyuanime.config.Config"/>
+        <applicationConfigurable instance="com.jiyuanime.ui.Setting" />
     </extensions>
 
     <actions>

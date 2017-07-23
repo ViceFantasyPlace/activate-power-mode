@@ -76,7 +76,7 @@
             <action id="ComboSwitchAction" class="com.jiyuanime.action.ComboSwitchAction" text="combo"
                     description="combo"/>
 
-            <action id="ColorfulSwitch" class="com.jiyuanime.colorful.ColorfulSwitchAction" text="colorful"
+            <action id="ColorfulSwitch" class="com.jiyuanime.action.ColorfulSwitchAction" text="colorful"
                     description="colorful"/>
         </group>
 

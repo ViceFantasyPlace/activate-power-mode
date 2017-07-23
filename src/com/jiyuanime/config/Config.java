@@ -7,6 +7,8 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+
 /**
  * 配置文件
  * Created by KADO on 15/12/17.
@@ -54,6 +56,8 @@ public class Config implements PersistentStateComponent<Config.State> {
         state.IS_COLORFUL = false;
 
         state.PARTICLE_MAX_COUNT = 5;
+
+        state.PARTICLE_COLOR = null;
     }
 
     public static Config getInstance() {
@@ -106,6 +110,11 @@ public class Config implements PersistentStateComponent<Config.State> {
          * 每次生成的粒子量
          */
         public int PARTICLE_MAX_COUNT = 5;
+
+        /**
+         * 粒子颜色,为null则代表auto
+         */
+        public Color PARTICLE_COLOR = null;
     }
 
 

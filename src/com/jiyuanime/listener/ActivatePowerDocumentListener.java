@@ -124,7 +124,9 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                 }
 
                 Color color;
-                if (state.IS_COLORFUL) {
+                if(state.PARTICLE_COLOR != null) {
+                    color = state.PARTICLE_COLOR;
+                } else if (state.IS_COLORFUL) {
                     color = ColorFactory.gen(); // 生成一个随机颜色
                 } else {
                     color = mEditor.getColorsScheme().getDefaultForeground();

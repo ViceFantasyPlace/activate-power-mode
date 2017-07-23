@@ -3,21 +3,23 @@ package com.jiyuanime.ui;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.ui.ColorPanel;
 import com.jiyuanime.config.Config;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class Setting implements Configurable {
 
-    private JCheckBox enableCheckBox;
-    private JCheckBox shakeCheckBox;
-    private JCheckBox particleCheckBox;
-    private JCheckBox comboCheckBox;
-    private JCheckBox colorfulCheckBox;
     private JTextField particleMaxCountTextField;
+    private ColorPanel colorChooser;
     private JPanel rootPanel;
+    private JCheckBox colorAutoCheckBox;
 
     private Config.State state = Config.getInstance().state;
 
@@ -31,6 +33,8 @@ public class Setting implements Configurable {
     @Override
     public JComponent createComponent() {
 
+        initListener();
+
         initSetting();
 
         return this.rootPanel;
@@ -40,12 +44,8 @@ public class Setting implements Configurable {
     public boolean isModified() {
 
         try {
-            return !Comparing.equal(state.IS_ENABLE, enableCheckBox.isSelected()) ||
-                    !Comparing.equal(state.IS_COMBO, comboCheckBox.isSelected()) ||
-                    !Comparing.equal(state.IS_SHAKE, shakeCheckBox.isSelected()) ||
-                    !Comparing.equal(state.IS_SPARK, particleCheckBox.isSelected()) ||
-                    !Comparing.equal(state.IS_COLORFUL, colorfulCheckBox.isSelected()) ||
-                    !Comparing.equal(state.PARTICLE_MAX_COUNT, Integer.parseInt(particleMaxCountTextField.getText()));
+            return !Comparing.equal(state.PARTICLE_MAX_COUNT, Integer.parseInt(particleMaxCountTextField.getText())) ||
+                    !Comparing.equal(state.PARTICLE_COLOR, colorAutoCheckBox.isSelected() ? null : colorChooser.getSelectedColor());
         } catch (NumberFormatException $ex) {
             return true;
         }
@@ -65,19 +65,31 @@ public class Setting implements Configurable {
             throw new ConfigurationException("The 'particle max count' field format error.");
         }
 
-        state.IS_ENABLE = enableCheckBox.isSelected();
-        state.IS_COMBO = comboCheckBox.isSelected();
-        state.IS_SHAKE = shakeCheckBox.isSelected();
-        state.IS_SPARK = particleCheckBox.isSelected();
-        state.IS_COLORFUL = colorfulCheckBox.isSelected();
+        if(!colorAutoCheckBox.isSelected() && colorChooser.getSelectedColor() == null) {
+            throw new ConfigurationException("'particle color' is not choose.'");
+        }
+
+        state.PARTICLE_COLOR = colorAutoCheckBox.isSelected() ? null : colorChooser.getSelectedColor();
+    }
+
+    private void initListener() {
+        colorAutoCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JCheckBox item = (JCheckBox) e.getItem();
+
+                colorChooser.setSelectedColor(null);
+                colorChooser.setEditable(!item.isSelected());
+            }
+        });
     }
 
     private void initSetting() {
-        enableCheckBox.setSelected(state.IS_ENABLE);
-        comboCheckBox.setSelected(state.IS_COMBO);
-        shakeCheckBox.setSelected(state.IS_SHAKE);
-        particleCheckBox.setSelected(state.IS_SPARK);
-        colorfulCheckBox.setSelected(state.IS_COLORFUL);
         particleMaxCountTextField.setText(String.valueOf(state.PARTICLE_MAX_COUNT));
+        if(state.PARTICLE_COLOR == null) {
+            colorAutoCheckBox.setSelected(true);
+        } else {
+            colorChooser.setSelectedColor(state.PARTICLE_COLOR);
+        }
     }
 }

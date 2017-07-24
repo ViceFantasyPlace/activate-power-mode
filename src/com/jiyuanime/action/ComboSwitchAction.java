@@ -9,35 +9,14 @@ import com.jiyuanime.config.Config;
 /**
  * Combo开关
  */
-public class ComboSwitchAction extends AnAction {
-
-    Config.State state = Config.getInstance().state;
-
-    public ComboSwitchAction() {
-        Presentation presentation = this.getTemplatePresentation();
-        if (state.IS_COMBO) {
-            presentation.setIcon(AllIcons.General.InspectionsOK);
-        } else {
-            presentation.setIcon(null);
-        }
+public class ComboSwitchAction extends BaseSwitchAction {
+    @Override
+    boolean getSwitchFieldValue() {
+        return state.IS_COMBO;
     }
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
-        if (state.IS_COMBO) {
-            this._disable(e.getPresentation());
-        } else {
-            this._enable(e.getPresentation());
-        }
-    }
-
-    private void _disable(Presentation presentation) {
-        state.IS_COMBO = false;
-        presentation.setIcon(null);
-    }
-
-    private void _enable(Presentation presentation) {
-        state.IS_COMBO = true;
-        presentation.setIcon(AllIcons.General.InspectionsOK);
+    void setSwitchFieldValue(boolean is_enable) {
+        state.IS_COMBO = is_enable;
     }
 }

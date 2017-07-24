@@ -1,5 +1,7 @@
 package com.jiyuanime.particle;
 
+import com.jiyuanime.config.Config;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -33,6 +35,8 @@ public class ParticlePanel implements Runnable, Border {
 
     private boolean isEnable = false;
 
+    private Config.State state = Config.getInstance().state;
+
     public static ParticlePanel getInstance() {
         if (mParticlePanel == null) {
             mParticlePanel = new ParticlePanel();
@@ -45,7 +49,6 @@ public class ParticlePanel implements Runnable, Border {
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         while (isEnable) {
             if (mParticleAreaGraphics != null) {
 
@@ -206,7 +209,7 @@ public class ParticlePanel implements Runnable, Border {
 
         Point particlePoint = ParticlePositionCalculateUtil.getParticlePositionOnArea(mParticleAreaWidth, mParticleAreaHeight);
 
-        int particleNumber = 5 + (int) Math.round(Math.random() * 5);
+        int particleNumber = 5 + (int) Math.round(Math.random() * state.PARTICLE_MAX_COUNT);
 
         for (int i = 0; i < particleNumber; i++) {
 

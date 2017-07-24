@@ -14,7 +14,7 @@ import com.jiyuanime.config.Config;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -130,7 +130,7 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                     color = mEditor.getColorsScheme().getDefaultForeground();
                 }
 
-                int fontSize = mEditor.getContentComponent().getFont().getSize();
+                int fontSize = mEditor.getColorsScheme().getEditorFontSize();
 
                 ParticlePanel particlePanel = ParticlePanel.getInstance();
                 if (particlePanel.isEnable()) {

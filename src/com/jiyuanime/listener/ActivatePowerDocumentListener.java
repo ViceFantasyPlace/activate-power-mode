@@ -1,7 +1,6 @@
 package com.jiyuanime.listener;
 
 
-import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -15,6 +14,7 @@ import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -29,9 +29,6 @@ public class ActivatePowerDocumentListener implements DocumentListener {
     private ArrayList<Document> mDocumentList = new ArrayList<>();
 
     private Editor mEditor;
-    private CaretModel mCaretModel;
-
-    private ActivatePowerCaretListener mActivatePowerCaretListener = new ActivatePowerCaretListener();
 
     public ActivatePowerDocumentListener(Project project) {
         mProject = project;
@@ -60,6 +57,14 @@ public class ActivatePowerDocumentListener implements DocumentListener {
     @Override
     public void documentChanged(DocumentEvent documentEvent) {
 
+        Editor selectedTextEditor = FileEditorManager.getInstance(mProject).getSelectedTextEditor();
+        if (mEditor == null || mEditor != selectedTextEditor)
+            mEditor = selectedTextEditor;
+
+        if (mEditor != null) {
+            Point point = mEditor.logicalPositionToXY(mEditor.getCaretModel().getCurrentCaret().getLogicalPosition());
+            ParticlePanel.getInstance().setCurrentCaretPosition(point);
+        }
     }
 
     public boolean addDocument(Document document) {
@@ -86,10 +91,6 @@ public class ActivatePowerDocumentListener implements DocumentListener {
     }
 
     private void cleanEditorCaret() {
-        if (mCaretModel != null && mActivatePowerCaretListener != null) {
-            mCaretModel.removeCaretListener(mActivatePowerCaretListener);
-            mCaretModel = null;
-        }
         mEditor = null;
     }
 
@@ -97,7 +98,6 @@ public class ActivatePowerDocumentListener implements DocumentListener {
         for (Document document : mDocumentList)
             clean(document, false);
         mDocumentList.clear();
-        mActivatePowerCaretListener = null;
         mProject = null;
     }
 
@@ -117,12 +117,6 @@ public class ActivatePowerDocumentListener implements DocumentListener {
             }
 
             if (state.IS_SPARK) {
-                CaretModel currentCaretModel = mEditor.getCaretModel();
-                if (mCaretModel == null || mCaretModel != currentCaretModel) {
-                    mCaretModel = currentCaretModel;
-                    mCaretModel.addCaretListener(mActivatePowerCaretListener);
-                }
-
                 Color color;
                 if(state.PARTICLE_COLOR != null) {
                     color = state.PARTICLE_COLOR;

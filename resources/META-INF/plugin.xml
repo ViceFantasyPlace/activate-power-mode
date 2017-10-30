@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
     <name>activate-power-mode</name>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
 
     <description>
@@ -15,6 +15,12 @@
 
     <change-notes>
         <![CDATA[
+          <h3>v0.1.5</h3>
+          <ul>
+            <li>修复删除没有粒子效果</li>
+            <li>修复快速敲击时存在残影残留</li>
+          </ul>
+
           <h3>v0.1.4</h3>
           <ul>
             <li>增加setting选择窗口</li>

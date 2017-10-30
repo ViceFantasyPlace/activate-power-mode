@@ -2,11 +2,19 @@ package com.jiyuanime.particle;
 
 import com.jiyuanime.config.Config;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.JComponent;
+import javax.swing.border.Border;
 
 /**
  * 粒子容器
@@ -53,7 +61,7 @@ public class ParticlePanel implements Runnable, Border {
             if (mParticleAreaGraphics != null) {
 
                 mParticleAreaGraphics.setBackground(new Color(0x00FFFFFF, true));
-                mParticleAreaGraphics.clearRect(0, 0, mParticleAreaWidth, mParticleAreaHeight);
+                mParticleAreaGraphics.clearRect(0, 0, mParticleAreaWidth * 2, mParticleAreaHeight * 2);
 
                 for (String key : mParticleViews.keySet()) {
                     ParticleView particleView = mParticleViews.get(key);

@@ -17,6 +17,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+
 /**
  * 震动文本监听接口
  * Created by suika on 15-12-13.
@@ -29,6 +31,8 @@ public class ActivatePowerDocumentListener implements DocumentListener {
     private ArrayList<Document> mDocumentList = new ArrayList<>();
 
     private Editor mEditor;
+
+    private JLabel mComboLabel;
 
     public ActivatePowerDocumentListener(Project project) {
         mProject = project;
@@ -48,6 +52,11 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                 manage.setClickCombo(0);
 
             manage.setClickTimeStamp(System.currentTimeMillis());
+
+            if (mComboLabel != null) {
+                mComboLabel.setText(String.valueOf(manage.getClickCombo()));
+            }
+
         }
 
         if ((state.IS_COMBO && manage.getClickCombo() > state.OPEN_FUNCTION_BORDER && mProject != null) || (!state.IS_COMBO && mProject != null))
@@ -134,5 +143,9 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                 }
             }
         }
+    }
+
+    public void setComboLabel(JLabel comboLabel) {
+        mComboLabel = comboLabel;
     }
 }

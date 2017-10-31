@@ -2,7 +2,11 @@ package com.jiyuanime;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.FileEditorManagerAdapter;
+import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
+import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.messages.MessageBusConnection;
@@ -10,10 +14,21 @@ import com.jiyuanime.config.Config;
 import com.jiyuanime.listener.ActivatePowerDocumentListener;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * 效果管理器
@@ -37,6 +52,8 @@ public class ActivatePowerModeManage {
 
     private long mClickTimeStamp;
     private int mClickCombo;
+
+    private JLabel mComboLabel;
 
     public void init(Project project) {
 
@@ -103,6 +120,8 @@ public class ActivatePowerModeManage {
         if (editor != null) {
             initShake(editor.getComponent());
             initParticle(editor.getContentComponent());
+
+            initComboLabel(editor.getContentComponent());
         }
     }
 
@@ -111,6 +130,30 @@ public class ActivatePowerModeManage {
             ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(project);
             if (activatePowerDocumentListener == null) {
                 activatePowerDocumentListener = new ActivatePowerDocumentListener(project);
+
+                mComboLabel = new JLabel("00");
+                mComboLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+                mComboLabel.setBackground(new Color(0x00FFFFFF, true));
+                mComboLabel.setForeground(Color.GREEN);
+
+                try {
+                    InputStream fontInputStream = new FileInputStream(getClass().getResource("/font/PressStart2P-Regular.ttf").getPath());
+                    Font font = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
+                    font = font.deriveFont(Font.BOLD, 64f);
+                    mComboLabel.setFont(font);
+                } catch (FontFormatException | IOException e) {
+                    e.printStackTrace();
+                    mComboLabel.setFont(new Font("Default", Font.BOLD,64));
+                }
+
+                Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+                if (mCurrentEditor == null || mCurrentEditor != selectedTextEditor)
+                    mCurrentEditor = selectedTextEditor;
+                if (mCurrentEditor != null)
+                    initComboLabel(mCurrentEditor.getContentComponent());
+
+                activatePowerDocumentListener.setComboLabel(mComboLabel);
+
                 mDocListenerMap.put(project, activatePowerDocumentListener);
             }
             if (activatePowerDocumentListener.addDocument(document))
@@ -149,6 +192,14 @@ public class ActivatePowerModeManage {
                 ParticlePanel.getInstance().reset(jContentComponent);
                 jContentComponent.setBorder(ParticlePanel.getInstance());
             }
+        }
+    }
+
+    private void initComboLabel(JComponent contentComponent) {
+        if (contentComponent != null) {
+            contentComponent.remove(mComboLabel);
+            contentComponent.add(mComboLabel);
+            contentComponent.setLayout(new FlowLayout(FlowLayout.RIGHT, 16, 16));
         }
     }
 

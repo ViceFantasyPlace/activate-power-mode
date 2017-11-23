@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 
 /**
@@ -121,7 +122,7 @@ public class ActivatePowerModeManage {
             initShake(editor.getComponent());
             initParticle(editor.getContentComponent());
 
-            initComboLabel(editor.getContentComponent());
+            addComboLabel(editor.getContentComponent(), 0);
         }
     }
 
@@ -130,34 +131,27 @@ public class ActivatePowerModeManage {
             ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(project);
             if (activatePowerDocumentListener == null) {
                 activatePowerDocumentListener = new ActivatePowerDocumentListener(project);
-
-                mComboLabel = new JLabel("00");
-                mComboLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                mComboLabel.setBackground(new Color(0x00FFFFFF, true));
-                mComboLabel.setForeground(Color.GREEN);
-
-                try {
-                    InputStream fontInputStream = new FileInputStream(getClass().getResource("/font/PressStart2P-Regular.ttf").getPath());
-                    Font font = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
-                    font = font.deriveFont(Font.BOLD, 64f);
-                    mComboLabel.setFont(font);
-                } catch (FontFormatException | IOException e) {
-                    e.printStackTrace();
-                    mComboLabel.setFont(new Font("Default", Font.BOLD,64));
-                }
-
-                Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-                if (mCurrentEditor == null || mCurrentEditor != selectedTextEditor)
-                    mCurrentEditor = selectedTextEditor;
-                if (mCurrentEditor != null)
-                    initComboLabel(mCurrentEditor.getContentComponent());
-
-                activatePowerDocumentListener.setComboLabel(mComboLabel);
-
                 mDocListenerMap.put(project, activatePowerDocumentListener);
             }
             if (activatePowerDocumentListener.addDocument(document))
                 document.addDocumentListener(activatePowerDocumentListener);
+
+            if (mComboLabel == null)
+                mComboLabel = initComboLabel();
+
+            Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+            if (mCurrentEditor == null || mCurrentEditor != selectedTextEditor)
+                mCurrentEditor = selectedTextEditor;
+            if (mCurrentEditor != null) {
+                JComponent contentJComponent = mCurrentEditor.getContentComponent();
+
+                JViewport jvp = (JViewport) contentJComponent.getParent();
+                jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getY()));
+
+                addComboLabel(contentJComponent, 0);
+            }
+
+            activatePowerDocumentListener.setComboLabel(mComboLabel);
         }
     }
 
@@ -195,11 +189,30 @@ public class ActivatePowerModeManage {
         }
     }
 
-    private void initComboLabel(JComponent contentComponent) {
+    private JLabel initComboLabel() {
+        JLabel comboLabel = new JLabel("0");
+        comboLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        comboLabel.setBackground(new Color(0x00FFFFFF, true));
+        comboLabel.setForeground(Color.GREEN);
+
+        try {
+            InputStream fontInputStream = new FileInputStream(getClass().getResource("/font/PressStart2P-Regular.ttf").getPath());
+            Font font = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
+            font = font.deriveFont(Font.BOLD, 64f);
+            comboLabel.setFont(font);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            comboLabel.setFont(new Font("Default", Font.BOLD, 64));
+        }
+
+        return comboLabel;
+    }
+
+    private void addComboLabel(JComponent contentComponent, int y) {
         if (contentComponent != null) {
+            contentComponent.setLayout(new FlowLayout(FlowLayout.RIGHT, 32, y + 32));
             contentComponent.remove(mComboLabel);
             contentComponent.add(mComboLabel);
-            contentComponent.setLayout(new FlowLayout(FlowLayout.RIGHT, 16, 16));
         }
     }
 

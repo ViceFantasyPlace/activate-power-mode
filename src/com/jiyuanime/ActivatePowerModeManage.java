@@ -122,7 +122,8 @@ public class ActivatePowerModeManage {
             initShake(editor.getComponent());
             initParticle(editor.getContentComponent());
 
-            addComboLabel(editor.getContentComponent(), 0);
+            JComponent contentComponent = editor.getContentComponent();
+            addComboLabel(contentComponent, 0, 0);
         }
     }
 
@@ -146,9 +147,9 @@ public class ActivatePowerModeManage {
                 JComponent contentJComponent = mCurrentEditor.getContentComponent();
 
                 JViewport jvp = (JViewport) contentJComponent.getParent();
-                jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getY()));
+                jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY()));
 
-                addComboLabel(contentJComponent, 0);
+                addComboLabel(contentJComponent, 0, 0);
             }
 
             activatePowerDocumentListener.setComboLabel(mComboLabel);
@@ -208,9 +209,9 @@ public class ActivatePowerModeManage {
         return comboLabel;
     }
 
-    private void addComboLabel(JComponent contentComponent, int y) {
-        if (contentComponent != null) {
-            contentComponent.setLayout(new FlowLayout(FlowLayout.RIGHT, 32, y + 32));
+    private void addComboLabel(JComponent contentComponent, int x, int y) {
+        if (contentComponent != null && contentComponent.getParent() != null && mComboLabel != null) {
+            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, x + contentComponent.getParent().getWidth() - mComboLabel.getWidth() - 32, y + 32));
             contentComponent.remove(mComboLabel);
             contentComponent.add(mComboLabel);
         }

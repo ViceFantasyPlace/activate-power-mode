@@ -10,11 +10,11 @@ import java.awt.*;
 public class ParticlePositionCalculateUtil {
 
     public static int getParticleAreaWidth(int fontSize) {
-        return fontSize * 20;
+        return fontSize * 40;
     }
 
     public static int getParticleAreaHeight(int fontSize) {
-        return fontSize * 20;
+        return fontSize * 40;
     }
 
     public static Point getParticlePositionOnArea(int areaWidth, int areaHeight) {

@@ -17,6 +17,7 @@ import com.jiyuanime.shake.ShakeManager;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 
@@ -54,7 +56,8 @@ public class ActivatePowerModeManage {
     private long mClickTimeStamp;
     private int mClickCombo;
 
-    private JLabel mComboLabel;
+    private JLabel mComboLabel, mMaxComboLabel;
+    private JPanel mComboPanel;
 
     public void init(Project project) {
 
@@ -121,9 +124,6 @@ public class ActivatePowerModeManage {
         if (editor != null) {
             initShake(editor.getComponent());
             initParticle(editor.getContentComponent());
-
-            JComponent contentComponent = editor.getContentComponent();
-            addComboLabel(contentComponent, 0, 0);
         }
     }
 
@@ -137,12 +137,18 @@ public class ActivatePowerModeManage {
             if (activatePowerDocumentListener.addDocument(document))
                 document.addDocumentListener(activatePowerDocumentListener);
 
+            if (mMaxComboLabel == null)
+                mMaxComboLabel = initMaxComboLabel();
             if (mComboLabel == null)
                 mComboLabel = initComboLabel();
+            if (mComboPanel == null)
+                mComboPanel = initComboPanel();
 
             Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
             if (selectedTextEditor != null) {
                 JComponent contentJComponent = selectedTextEditor.getContentComponent();
+
+                initParticle(contentJComponent);
 
                 JViewport jvp = (JViewport) contentJComponent.getParent();
                 jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY()));
@@ -188,9 +194,18 @@ public class ActivatePowerModeManage {
         }
     }
 
+    private JPanel initComboPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(0x00FFFFFF, true));
+        panel.setForeground(new Color(0x00FFFFFF, true));
+        panel.setLayout(new BorderLayout());
+
+        return panel;
+    }
+
     private JLabel initComboLabel() {
         JLabel comboLabel = new JLabel("0");
-        comboLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        comboLabel.setHorizontalAlignment(SwingConstants.CENTER);
         comboLabel.setBackground(new Color(0x00FFFFFF, true));
         comboLabel.setForeground(Color.GREEN);
 
@@ -207,11 +222,39 @@ public class ActivatePowerModeManage {
         return comboLabel;
     }
 
+    private JLabel initMaxComboLabel() {
+        JLabel comboLabel = new JLabel(String.valueOf("Max " + Config.getInstance().state.MAX_CLICK_COMBO));
+        comboLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        comboLabel.setBackground(new Color(0x00FFFFFF, true));
+        comboLabel.setForeground(Color.GREEN);
+
+        try {
+            InputStream fontInputStream = new FileInputStream(getClass().getResource("/font/PressStart2P-Regular.ttf").getPath());
+            Font font = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
+            font = font.deriveFont(Font.BOLD, 24f);
+            comboLabel.setFont(font);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+            comboLabel.setFont(new Font("Default", Font.BOLD, 24));
+        }
+
+        return comboLabel;
+    }
+
     private void addComboLabel(JComponent contentComponent, int x, int y) {
-        if (contentComponent != null && contentComponent.getParent() != null && mComboLabel != null) {
-            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, (int) (x + contentComponent.getParent().getWidth() - mComboLabel.getPreferredSize().getWidth() - 32), y + 32));
-            contentComponent.remove(mComboLabel);
-            contentComponent.add(mComboLabel);
+        if (contentComponent != null && contentComponent.getParent() != null && mMaxComboLabel != null && mComboLabel != null) {
+
+            mMaxComboLabel.setText(String.valueOf("Max " + Config.getInstance().state.MAX_CLICK_COMBO));
+
+            mComboPanel.remove(mMaxComboLabel);
+            mComboPanel.remove(mComboLabel);
+            mComboPanel.add(mMaxComboLabel, BorderLayout.NORTH);
+            mComboPanel.add(mComboLabel, BorderLayout.CENTER);
+
+            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, (int) (x + contentComponent.getParent().getWidth() - mComboPanel.getPreferredSize().getWidth() - 32), y + 32));
+
+            contentComponent.remove(mComboPanel);
+            contentComponent.add(mComboPanel);
         }
     }
 

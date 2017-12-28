@@ -12,6 +12,7 @@ import com.jiyuanime.colorful.ColorFactory;
 import com.jiyuanime.config.Config;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
+import com.jiyuanime.utils.IntegerUtil;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -52,15 +53,17 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                 manage.setClickCombo(0);
 
             manage.setClickTimeStamp(System.currentTimeMillis());
-
-            if (mComboLabel != null) {
-                mComboLabel.setText(String.valueOf(manage.getClickCombo()));
-            }
-
         }
 
         if ((state.IS_COMBO && manage.getClickCombo() > state.OPEN_FUNCTION_BORDER && mProject != null) || (!state.IS_COMBO && mProject != null))
             handleActivatePower(manage);
+
+        if (mComboLabel != null) {
+            mComboLabel.setText(String.valueOf(manage.getClickCombo()));
+            if (IntegerUtil.isSizeTable(manage.getClickCombo())) {
+                manage.updateComboLabelPosition(mProject);
+            }
+        }
     }
 
     @Override
@@ -127,7 +130,7 @@ public class ActivatePowerDocumentListener implements DocumentListener {
 
             if (state.IS_SPARK) {
                 Color color;
-                if(state.PARTICLE_COLOR != null) {
+                if (state.PARTICLE_COLOR != null) {
                     color = state.PARTICLE_COLOR;
                 } else if (state.IS_COLORFUL) {
                     color = ColorFactory.gen(); // 生成一个随机颜色

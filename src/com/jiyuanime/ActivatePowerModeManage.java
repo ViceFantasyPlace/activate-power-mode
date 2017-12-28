@@ -141,10 +141,8 @@ public class ActivatePowerModeManage {
                 mComboLabel = initComboLabel();
 
             Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-            if (mCurrentEditor == null || mCurrentEditor != selectedTextEditor)
-                mCurrentEditor = selectedTextEditor;
-            if (mCurrentEditor != null) {
-                JComponent contentJComponent = mCurrentEditor.getContentComponent();
+            if (selectedTextEditor != null) {
+                JComponent contentJComponent = selectedTextEditor.getContentComponent();
 
                 JViewport jvp = (JViewport) contentJComponent.getParent();
                 jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY()));
@@ -211,9 +209,17 @@ public class ActivatePowerModeManage {
 
     private void addComboLabel(JComponent contentComponent, int x, int y) {
         if (contentComponent != null && contentComponent.getParent() != null && mComboLabel != null) {
-            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, x + contentComponent.getParent().getWidth() - mComboLabel.getWidth() - 32, y + 32));
+            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, (int) (x + contentComponent.getParent().getWidth() - mComboLabel.getPreferredSize().getWidth() - 32), y + 32));
             contentComponent.remove(mComboLabel);
             contentComponent.add(mComboLabel);
+        }
+    }
+
+    public void updateComboLabelPosition(Project project) {
+        Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        if (selectedTextEditor != null) {
+            JComponent contentJComponent = selectedTextEditor.getContentComponent();
+            addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
         }
     }
 

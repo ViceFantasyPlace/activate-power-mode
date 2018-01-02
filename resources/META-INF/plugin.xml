@@ -1,8 +1,10 @@
 <idea-plugin>
     <id>com.jiyuanime.ActivatePowerModeApplicationPlugin</id>
     <name>activate-power-mode</name>
-    <version>0.1.5</version>
-    <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">ViceFantasyPlace</vendor>
+    <version>0.1.6</version>
+    <vendor email="" url="https://github.com/ViceFantasyPlace/activate-power-mode">
+        ViceFantasyPlace
+    </vendor>
 
     <description>
         <![CDATA[
@@ -15,6 +17,13 @@
 
     <change-notes>
         <![CDATA[
+          <h3>v0.1.6</h3>
+          <ul>
+            <li>增加最大Combo数显示</li>
+            <li>增加Combo连击数显示</li>
+            <li>增加Combo时间间隔显示</li>
+          </ul>
+
           <h3>v0.1.5</h3>
           <ul>
             <li>修复删除没有粒子效果</li>
@@ -63,7 +72,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceInterface="com.jiyuanime.config.Config"
                             serviceImplementation="com.jiyuanime.config.Config"/>
-        <applicationConfigurable instance="com.jiyuanime.ui.Setting" />
+        <applicationConfigurable instance="com.jiyuanime.ui.Setting"/>
     </extensions>
 
     <actions>
@@ -72,24 +81,29 @@
                text="activate-power-mode">
             <add-to-group group-id="WindowMenu" anchor="first"/>
 
-            <action id="ActivatePowerEnable" class="com.jiyuanime.action.ActivatePowerEnableAction" text="enable"
+            <action id="ActivatePowerEnable" class="com.jiyuanime.action.ActivatePowerEnableAction"
+                    text="enable"
                     description="enable">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt A"/>
             </action>
 
-            <action id="ShakeSwitch" class="com.jiyuanime.action.ShakeSwitchAction" text="shake" description="shake">
+            <action id="ShakeSwitch" class="com.jiyuanime.action.ShakeSwitchAction" text="shake"
+                    description="shake">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt S"/>
             </action>
 
-            <action id="ParticleSwitch" class="com.jiyuanime.action.ParticleSwitchAction" text="particle"
+            <action id="ParticleSwitch" class="com.jiyuanime.action.ParticleSwitchAction"
+                    text="particle"
                     description="particle">
                 <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
             </action>
 
-            <action id="ComboSwitchAction" class="com.jiyuanime.action.ComboSwitchAction" text="combo"
+            <action id="ComboSwitchAction" class="com.jiyuanime.action.ComboSwitchAction"
+                    text="combo"
                     description="combo"/>
 
-            <action id="ColorfulSwitch" class="com.jiyuanime.action.ColorfulSwitchAction" text="colorful"
+            <action id="ColorfulSwitch" class="com.jiyuanime.action.ColorfulSwitchAction"
+                    text="colorful"
                     description="colorful"/>
         </group>
 
@@ -97,7 +111,8 @@
 
     <application-components>
         <component>
-            <implementation-class>com.jiyuanime.ActivatePowerModeApplicationPlugin</implementation-class>
+            <implementation-class>com.jiyuanime.ActivatePowerModeApplicationPlugin
+            </implementation-class>
         </component>
     </application-components>
 </idea-plugin>

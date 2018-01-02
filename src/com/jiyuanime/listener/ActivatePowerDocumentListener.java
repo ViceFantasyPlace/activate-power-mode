@@ -46,7 +46,7 @@ public class ActivatePowerDocumentListener implements DocumentListener {
 
         if (state.IS_COMBO) {
             // 文本变化在 CLICK_TIME_INTERVAL 时间内
-            if (System.currentTimeMillis() - manage.getClickTimeStamp() <= state.CLICK_TIME_INTERVAL) {
+            if (manage.getClickCombo() == 0 || System.currentTimeMillis() - manage.getClickTimeStamp() <= state.CLICK_TIME_INTERVAL) {
                 manage.setClickCombo(manage.getClickCombo() + 1);
                 state.MAX_CLICK_COMBO = manage.getClickCombo() > state.MAX_CLICK_COMBO ? manage.getClickCombo() : state.MAX_CLICK_COMBO;
             } else

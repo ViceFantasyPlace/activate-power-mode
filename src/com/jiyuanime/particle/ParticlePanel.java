@@ -1,5 +1,6 @@
 package com.jiyuanime.particle;
 
+import com.intellij.util.ui.JBUI;
 import com.jiyuanime.config.Config;
 
 import java.awt.AlphaComposite;
@@ -91,14 +92,14 @@ public class ParticlePanel implements Runnable, Border {
             return;
 
         Graphics2D graphics2 = (Graphics2D) g;
-        graphics2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+        graphics2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         Point point = ParticlePositionCalculateUtil.getParticleAreaPositionOnEditorArea(mCaretPoint, mParticleAreaWidth, mParticleAreaHeight);
         graphics2.drawImage(mParticleAreaImage, point.x, point.y, c);
     }
 
     @Override
     public Insets getBorderInsets(Component c) {
-        return new Insets(0, 0, 0, 0);
+        return JBUI.emptyInsets();
     }
 
     @Override
@@ -251,7 +252,6 @@ public class ParticlePanel implements Runnable, Border {
     }
 
     public void setCurrentCaretPosition(Point currentCaretPosition) {
-        if (mCurrentCaretPosition == null)
-            mCurrentCaretPosition = currentCaretPosition;
+        mCurrentCaretPosition = currentCaretPosition;
     }
 }

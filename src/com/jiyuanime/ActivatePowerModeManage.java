@@ -9,11 +9,13 @@ import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.JBProgressBar;
 import com.intellij.util.messages.MessageBusConnection;
 import com.jiyuanime.config.Config;
 import com.jiyuanime.listener.ActivatePowerDocumentListener;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
+import com.jiyuanime.utils.IntegerUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +28,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -58,6 +62,7 @@ public class ActivatePowerModeManage {
 
     private JLabel mComboLabel, mMaxComboLabel;
     private JPanel mComboPanel;
+    private JBProgressBar mClickTimeStampProgressBar;
 
     public void init(Project project) {
 
@@ -143,17 +148,17 @@ public class ActivatePowerModeManage {
                 mComboLabel = initComboLabel();
             if (mComboPanel == null)
                 mComboPanel = initComboPanel();
+            if (mClickTimeStampProgressBar == null)
+                mClickTimeStampProgressBar = initClickTimeStampProgressBar();
 
             Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
             if (selectedTextEditor != null) {
                 JComponent contentJComponent = selectedTextEditor.getContentComponent();
 
-                initParticle(contentJComponent);
-
                 JViewport jvp = (JViewport) contentJComponent.getParent();
                 jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY()));
 
-                addComboLabel(contentJComponent, 0, 0);
+                addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
             }
 
             activatePowerDocumentListener.setComboLabel(mComboLabel);
@@ -196,8 +201,8 @@ public class ActivatePowerModeManage {
 
     private JPanel initComboPanel() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(0x00FFFFFF, true));
-        panel.setForeground(new Color(0x00FFFFFF, true));
+        panel.setBackground(null);
+        panel.setOpaque(false);
         panel.setLayout(new BorderLayout());
 
         return panel;
@@ -241,6 +246,14 @@ public class ActivatePowerModeManage {
         return comboLabel;
     }
 
+    private JBProgressBar initClickTimeStampProgressBar() {
+        JBProgressBar clickTimeStampProgressBar = new JBProgressBar();
+        clickTimeStampProgressBar.setForeground(Color.GREEN);
+        clickTimeStampProgressBar.setVisible(false);
+
+        return clickTimeStampProgressBar;
+    }
+
     private void addComboLabel(JComponent contentComponent, int x, int y) {
         if (contentComponent != null && contentComponent.getParent() != null && mMaxComboLabel != null && mComboLabel != null) {
 
@@ -248,8 +261,10 @@ public class ActivatePowerModeManage {
 
             mComboPanel.remove(mMaxComboLabel);
             mComboPanel.remove(mComboLabel);
+            mComboPanel.remove(mClickTimeStampProgressBar);
             mComboPanel.add(mMaxComboLabel, BorderLayout.NORTH);
             mComboPanel.add(mComboLabel, BorderLayout.CENTER);
+            mComboPanel.add(mClickTimeStampProgressBar, BorderLayout.SOUTH);
 
             contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, (int) (x + contentComponent.getParent().getWidth() - mComboPanel.getPreferredSize().getWidth() - 32), y + 32));
 
@@ -264,6 +279,26 @@ public class ActivatePowerModeManage {
             JComponent contentJComponent = selectedTextEditor.getContentComponent();
             addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
         }
+    }
+
+    private Timer mClickTimeStampTimer;
+    private ClickTimeStampTimerTask mClickTimeStampTimerTask;
+
+    private void updateClickTimeStamp() {
+        if (mClickTimeStampTimer == null)
+            mClickTimeStampTimer = new Timer();
+        if (mClickTimeStampTimerTask == null)
+            mClickTimeStampTimerTask = new ClickTimeStampTimerTask();
+        mClickTimeStampTimer.schedule(mClickTimeStampTimerTask, 0, ClickTimeStampTimerTask.CLICK_TIME_INTERVAL);
+    }
+
+    private void cancelClickTimeStamp() {
+        if (mClickTimeStampTimer != null) {
+            mClickTimeStampTimer.cancel();
+            mClickTimeStampTimer.purge();
+        }
+        mClickTimeStampTimerTask = null;
+        mClickTimeStampTimer = null;
     }
 
     public void resetEditor(Editor editor) {
@@ -320,6 +355,8 @@ public class ActivatePowerModeManage {
 
     public void setClickTimeStamp(long clickTimeStamp) {
         mClickTimeStamp = clickTimeStamp;
+        cancelClickTimeStamp();
+        updateClickTimeStamp();
     }
 
     public int getClickCombo() {
@@ -328,5 +365,43 @@ public class ActivatePowerModeManage {
 
     public void setClickCombo(int clickCombo) {
         mClickCombo = clickCombo;
+    }
+
+    class ClickTimeStampTimerTask extends TimerTask {
+
+        private static final int CLICK_TIME_INTERVAL = 100;
+
+        private long mClickTimeStampInterval;
+
+        ClickTimeStampTimerTask() {
+            mClickTimeStampInterval = Config.getInstance().state.CLICK_TIME_INTERVAL;
+        }
+
+        @Override
+        public void run() {
+            if (mClickTimeStampInterval > 0) {
+                mClickTimeStampInterval -= CLICK_TIME_INTERVAL;
+
+                int value = (int) ((float) mClickTimeStampInterval / (float) Config.getInstance().state.CLICK_TIME_INTERVAL * 100);
+                mClickTimeStampProgressBar.setValue(value);
+                mClickTimeStampProgressBar.setVisible(true);
+            } else {
+                cancelClickTimeStamp();
+                setClickCombo(0);
+
+                mClickTimeStampProgressBar.setValue(0);
+                mClickTimeStampProgressBar.setVisible(false);
+
+                if (mComboLabel != null) {
+                    mComboLabel.setText(String.valueOf(getClickCombo()));
+                    if (IntegerUtil.isSizeTable(getClickCombo())) {
+                        if (mCurrentEditor != null) {
+                            JComponent contentJComponent = mCurrentEditor.getContentComponent();
+                            addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

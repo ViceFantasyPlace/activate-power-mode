@@ -24,7 +24,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -215,7 +214,7 @@ public class ActivatePowerModeManage {
         comboLabel.setForeground(Color.GREEN);
 
         try {
-            InputStream fontInputStream = new FileInputStream(getClass().getResource("/font/PressStart2P-Regular.ttf").getPath());
+            InputStream fontInputStream = getClass().getResourceAsStream("/font/PressStart2P-Regular.ttf");
             Font font = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
             font = font.deriveFont(Font.BOLD, 64f);
             comboLabel.setFont(font);
@@ -234,7 +233,7 @@ public class ActivatePowerModeManage {
         comboLabel.setForeground(Color.GREEN);
 
         try {
-            InputStream fontInputStream = new FileInputStream(getClass().getResource("/font/PressStart2P-Regular.ttf").getPath());
+            InputStream fontInputStream = getClass().getResourceAsStream("/font/PressStart2P-Regular.ttf");
             Font font = Font.createFont(Font.TRUETYPE_FONT, fontInputStream);
             font = font.deriveFont(Font.BOLD, 24f);
             comboLabel.setFont(font);

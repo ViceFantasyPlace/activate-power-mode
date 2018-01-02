@@ -9,7 +9,7 @@ import java.awt.color.ColorSpace;
  * Created by KADO on 15/12/15.
  */
 class ParticleView {
-    public static final int PARTICLE_WIDTH = 8;
+    public static final int PARTICLE_WIDTH = 6;
 
     public Color mColor;
     public float mAlpha;

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * com.jiyuanime.ActivatePowerModeApplicationPlugin
- * <p>
  * Created by suika on 15-12-13.
  */
 public class ActivatePowerModeApplicationPlugin implements ApplicationComponent {

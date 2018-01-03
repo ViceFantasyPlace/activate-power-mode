@@ -5,6 +5,7 @@ activate-power-mode for IDEA
 -------
 
 ![PREVIEW](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview.gif?raw=true) 
+![PREVIEW_2](https://github.com/ViceFantasyPlace/activate-power-mode/blob/master/ActivatePowerModePreview-2.gif?raw=true) 
 
 
 Features.

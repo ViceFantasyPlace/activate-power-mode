@@ -17,6 +17,12 @@
 
     <change-notes>
         <![CDATA[
+          <h3>v0.1.7</h3>
+          <ul>
+            <li>修复Combo开关关闭Combo计算还是显示问题</li>
+            <li>粒子颜色根据EditorHighlighter获取颜色显示</li>
+          </ul>
+
           <h3>v0.1.6</h3>
           <ul>
             <li>增加最大Combo数显示</li>

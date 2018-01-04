@@ -5,6 +5,9 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.editor.highlighter.EditorHighlighter;
+import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.jiyuanime.ActivatePowerModeManage;
@@ -135,7 +138,11 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                 } else if (state.IS_COLORFUL) {
                     color = ColorFactory.gen(); // 生成一个随机颜色
                 } else {
-                    color = mEditor.getColorsScheme().getDefaultForeground();
+                    EditorEx editorEx = (EditorEx) mEditor;
+                    EditorHighlighter editorHighlighter = editorEx.getHighlighter();
+                    HighlighterIterator highlighterIterator = editorHighlighter.createIterator(mEditor.getCaretModel().getOffset());
+                    Color fontColor = highlighterIterator.getTextAttributes().getForegroundColor();
+                    color = fontColor != null ? fontColor : mEditor.getColorsScheme().getDefaultForeground();
                 }
 
                 int fontSize = mEditor.getColorsScheme().getEditorFontSize();

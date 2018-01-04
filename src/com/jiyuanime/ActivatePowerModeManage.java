@@ -1,23 +1,5 @@
 package com.jiyuanime;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JViewport;
-import javax.swing.SwingConstants;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -34,6 +16,25 @@ import com.jiyuanime.listener.ActivatePowerDocumentListener;
 import com.jiyuanime.particle.ParticlePanel;
 import com.jiyuanime.shake.ShakeManager;
 import com.jiyuanime.utils.IntegerUtil;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JViewport;
+import javax.swing.SwingConstants;
 
 /**
  * 效果管理器
@@ -66,8 +67,7 @@ public class ActivatePowerModeManage {
 
         if (project != null) {
             // 监听FileEditor的状态
-            MessageBusConnection connection = project.getMessageBus()
-                                                     .connect();
+            MessageBusConnection connection = project.getMessageBus().connect();
             connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerAdapter() {
                 @Override
                 public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
@@ -77,8 +77,7 @@ public class ActivatePowerModeManage {
                     destroyParticle();
                     mCurrentEditor = null;
 
-                    initDocument(source.getProject(), FileDocumentManager.getInstance()
-                                                                         .getDocument(file));
+                    initDocument(source.getProject(), FileDocumentManager.getInstance().getDocument(file));
                 }
 
                 @Override
@@ -87,8 +86,7 @@ public class ActivatePowerModeManage {
 
                     ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(source.getProject());
                     if (activatePowerDocumentListener != null)
-                        activatePowerDocumentListener.clean(FileDocumentManager.getInstance()
-                                                                               .getDocument(file), true);
+                        activatePowerDocumentListener.clean(FileDocumentManager.getInstance().getDocument(file), true);
                 }
 
                 @Override
@@ -103,8 +101,7 @@ public class ActivatePowerModeManage {
                         FileEditorManager fileEditorManager = event.getManager();
                         VirtualFile virtualFile = event.getNewFile();
                         if (virtualFile != null)
-                            initDocument(fileEditorManager.getProject(), FileDocumentManager.getInstance()
-                                                                                            .getDocument(virtualFile));
+                            initDocument(fileEditorManager.getProject(), FileDocumentManager.getInstance().getDocument(virtualFile));
                     }
                 }
             });
@@ -154,8 +151,7 @@ public class ActivatePowerModeManage {
                 if (mClickTimeStampProgressBar == null)
                     mClickTimeStampProgressBar = initClickTimeStampProgressBar();
 
-                Editor selectedTextEditor = FileEditorManager.getInstance(project)
-                                                             .getSelectedTextEditor();
+                Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
                 if (selectedTextEditor != null) {
                     JComponent contentJComponent = selectedTextEditor.getContentComponent();
 
@@ -188,10 +184,8 @@ public class ActivatePowerModeManage {
     private void initShake(JComponent jComponent) {
         Config.State state = Config.getInstance().state;
         if (state.IS_SHAKE) {
-            if (ShakeManager.getInstance()
-                            .getNowEditorJComponent() != jComponent) {
-                ShakeManager.getInstance()
-                            .reset(jComponent);
+            if (ShakeManager.getInstance().getNowEditorJComponent() != jComponent) {
+                ShakeManager.getInstance().reset(jComponent);
             }
         }
     }
@@ -199,10 +193,8 @@ public class ActivatePowerModeManage {
     private void initParticle(JComponent jContentComponent) {
         Config.State state = Config.getInstance().state;
         if (state.IS_SPARK) {
-            if (ParticlePanel.getInstance()
-                             .getNowEditorJComponent() != jContentComponent) {
-                ParticlePanel.getInstance()
-                             .reset(jContentComponent);
+            if (ParticlePanel.getInstance().getNowEditorJComponent() != jContentComponent) {
+                ParticlePanel.getInstance().reset(jContentComponent);
                 jContentComponent.setBorder(ParticlePanel.getInstance());
             }
         }
@@ -275,9 +267,7 @@ public class ActivatePowerModeManage {
             mComboPanel.add(mComboLabel, BorderLayout.CENTER);
             mComboPanel.add(mClickTimeStampProgressBar, BorderLayout.SOUTH);
 
-            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, (int) (x + contentComponent.getParent()
-                                                                                                  .getWidth() - mComboPanel.getPreferredSize()
-                                                                                                                           .getWidth() - 32), y + 32));
+            contentComponent.setLayout(new FlowLayout(FlowLayout.LEFT, (int) (x + contentComponent.getParent().getWidth() - mComboPanel.getPreferredSize().getWidth() - 32), y + 32));
 
             contentComponent.remove(mComboPanel);
             contentComponent.add(mComboPanel);
@@ -285,8 +275,7 @@ public class ActivatePowerModeManage {
     }
 
     public void updateComboLabelPosition(Project project) {
-        Editor selectedTextEditor = FileEditorManager.getInstance(project)
-                                                     .getSelectedTextEditor();
+        Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (selectedTextEditor != null) {
             JComponent contentJComponent = selectedTextEditor.getContentComponent();
             addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
@@ -330,19 +319,16 @@ public class ActivatePowerModeManage {
     }
 
     private void destroyShake() {
-        ShakeManager.getInstance()
-                    .destroy();
+        ShakeManager.getInstance().destroy();
     }
 
     private void destroyParticle() {
-        ParticlePanel.getInstance()
-                     .destroy();
+        ParticlePanel.getInstance().destroy();
     }
 
     private void destroyProjectMessageBus(Project project, boolean isRemoveProject) {
         if (project != null) {
-            MessageBusConnection connection = project.getMessageBus()
-                                                     .connect();
+            MessageBusConnection connection = project.getMessageBus().connect();
             connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerAdapter() {
                 @Override
                 public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {

@@ -77,7 +77,7 @@ public class ActivatePowerDocumentListener implements DocumentListener {
             mEditor = selectedTextEditor;
 
         if (mEditor != null) {
-            Point point = mEditor.logicalPositionToXY(mEditor.getCaretModel().getCurrentCaret().getLogicalPosition());
+            Point point = mEditor.visualPositionToXY(mEditor.getCaretModel().getCurrentCaret().getSelectionEndPosition());
             ParticlePanel.getInstance().setCurrentCaretPosition(point);
         }
     }
@@ -140,7 +140,7 @@ public class ActivatePowerDocumentListener implements DocumentListener {
                 } else {
                     EditorEx editorEx = (EditorEx) mEditor;
                     EditorHighlighter editorHighlighter = editorEx.getHighlighter();
-                    HighlighterIterator highlighterIterator = editorHighlighter.createIterator(mEditor.getCaretModel().getOffset());
+                    HighlighterIterator highlighterIterator = editorHighlighter.createIterator(mEditor.getCaretModel().getCurrentCaret().getOffset());
                     Color fontColor = highlighterIterator.getTextAttributes().getForegroundColor();
                     color = fontColor != null ? fontColor : mEditor.getColorsScheme().getDefaultForeground();
                 }

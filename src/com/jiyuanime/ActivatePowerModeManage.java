@@ -141,26 +141,33 @@ public class ActivatePowerModeManage {
             if (activatePowerDocumentListener.addDocument(document))
                 document.addDocumentListener(activatePowerDocumentListener);
 
-            if (state.IS_COMBO) {
-                if (mMaxComboLabel == null)
-                    mMaxComboLabel = initMaxComboLabel();
-                if (mComboLabel == null)
-                    mComboLabel = initComboLabel();
-                if (mComboPanel == null)
-                    mComboPanel = initComboPanel();
-                if (mClickTimeStampProgressBar == null)
-                    mClickTimeStampProgressBar = initClickTimeStampProgressBar();
+            initComboView(project);
+        }
+    }
 
-                Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-                if (selectedTextEditor != null) {
-                    JComponent contentJComponent = selectedTextEditor.getContentComponent();
+    public void initComboView(Project project) {
+        if (project != null && state.IS_COMBO) {
+            if (mMaxComboLabel == null)
+                mMaxComboLabel = initMaxComboLabel();
+            if (mComboLabel == null)
+                mComboLabel = initComboLabel();
+            if (mComboPanel == null)
+                mComboPanel = initComboPanel();
+            if (mClickTimeStampProgressBar == null)
+                mClickTimeStampProgressBar = initClickTimeStampProgressBar();
 
-                    JViewport jvp = (JViewport) contentJComponent.getParent();
-                    jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY()));
+            Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+            if (selectedTextEditor != null) {
+                JComponent contentJComponent = selectedTextEditor.getContentComponent();
 
-                    addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
-                }
+                JViewport jvp = (JViewport) contentJComponent.getParent();
+                jvp.addChangeListener(e -> addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY()));
 
+                addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
+            }
+
+            ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(project);
+            if (activatePowerDocumentListener != null) {
                 activatePowerDocumentListener.setComboLabel(mComboLabel);
             }
         }
@@ -256,7 +263,7 @@ public class ActivatePowerModeManage {
     }
 
     private void addComboLabel(JComponent contentComponent, int x, int y) {
-        if (contentComponent != null && contentComponent.getParent() != null && mMaxComboLabel != null && mComboLabel != null) {
+        if (contentComponent != null && contentComponent.getParent() != null && mComboPanel != null && mMaxComboLabel != null && mComboLabel != null && mClickTimeStampProgressBar != null) {
 
             mMaxComboLabel.setText(String.valueOf("Max " + Config.getInstance().state.MAX_CLICK_COMBO));
 
@@ -279,6 +286,27 @@ public class ActivatePowerModeManage {
         if (selectedTextEditor != null) {
             JComponent contentJComponent = selectedTextEditor.getContentComponent();
             addComboLabel(contentJComponent, -contentJComponent.getX(), -contentJComponent.getY());
+        }
+    }
+
+    public void clearComboView(Project project) {
+
+        Editor selectedTextEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        if (selectedTextEditor != null) {
+            JComponent contentJComponent = selectedTextEditor.getContentComponent();
+            contentJComponent.remove(mComboPanel);
+        }
+
+        mComboLabel = null;
+        mMaxComboLabel = null;
+        mComboPanel = null;
+        mClickTimeStampProgressBar = null;
+
+        for (Project p : mDocListenerMap.keySet()) {
+            ActivatePowerDocumentListener activatePowerDocumentListener = mDocListenerMap.get(p);
+            if (activatePowerDocumentListener != null) {
+                activatePowerDocumentListener.setComboLabel(null);
+            }
         }
     }
 
@@ -384,14 +412,18 @@ public class ActivatePowerModeManage {
                 mClickTimeStampInterval -= CLICK_TIME_INTERVAL;
 
                 int value = (int) ((float) mClickTimeStampInterval / (float) Config.getInstance().state.CLICK_TIME_INTERVAL * 100);
-                mClickTimeStampProgressBar.setValue(value);
-                mClickTimeStampProgressBar.setVisible(true);
+                if (mClickTimeStampProgressBar != null) {
+                    mClickTimeStampProgressBar.setValue(value);
+                    mClickTimeStampProgressBar.setVisible(true);
+                }
             } else {
                 cancelClickTimeStamp();
                 setClickCombo(0);
 
-                mClickTimeStampProgressBar.setValue(0);
-                mClickTimeStampProgressBar.setVisible(false);
+                if (mClickTimeStampProgressBar != null) {
+                    mClickTimeStampProgressBar.setValue(0);
+                    mClickTimeStampProgressBar.setVisible(false);
+                }
 
                 if (mComboLabel != null) {
                     mComboLabel.setText(String.valueOf(getClickCombo()));

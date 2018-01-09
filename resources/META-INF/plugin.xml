@@ -17,6 +17,11 @@
 
     <change-notes>
         <![CDATA[
+          <h3>v0.1.8</h3>
+          <ul>
+            <li>优化Combo开关关闭Combo计算显示</li>
+          </ul>
+
           <h3>v0.1.7</h3>
           <ul>
             <li>修复Combo开关关闭Combo计算还是显示问题</li>

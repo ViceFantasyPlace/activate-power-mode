@@ -1,0 +1,57 @@
+<idea-plugin>
+    <vendor email="" url="https://github.com/zzqo/activate-power-mode">zzqo</vendor>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
+
+    <resource-bundle>messages.ActivatePowerModeProBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="com.jiyuanime.config.Config"
+                            serviceImplementation="com.jiyuanime.config.Config"/>
+        <applicationConfigurable instance="com.jiyuanime.ui.Setting"/>
+
+        <postStartupActivity implementation="com.jiyuanime.listener.ActivatePowerModeListener"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="ActivatePowerModeProGroup" popup="true"
+               text="Activate Power Mode Pro">
+            <add-to-group group-id="WindowMenu" anchor="first"/>
+
+            <action id="ActivatePowerEnable" class="com.jiyuanime.action.ActivatePowerEnableAction"
+                    text="enable"
+                    description="enable">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt A"/>
+            </action>
+
+            <action id="ShakeSwitch" class="com.jiyuanime.action.ShakeSwitchAction"
+                    text="shake"
+                    description="shake">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt S"/>
+            </action>
+
+            <action id="ParticleSwitch" class="com.jiyuanime.action.ParticleSwitchAction"
+                    text="particle"
+                    description="particle">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
+            </action>
+
+            <action id="ComboSwitchAction" class="com.jiyuanime.action.ComboSwitchAction"
+                    text="combo"
+                    description="combo"/>
+
+            <action id="ColorfulSwitch" class="com.jiyuanime.action.ColorfulSwitchAction"
+                    text="colorful"
+                    description="colorful"/>
+
+            <action id="ClearComboCount" class="com.jiyuanime.action.ClearComboCountAction"
+                    text="Clear Combo"
+                    description="Clear combo count"/>
+        </group>
+
+    </actions>
+
+</idea-plugin>
